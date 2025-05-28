@@ -4,11 +4,77 @@
   font-family: 'Roboto', sans-serif;
 }
 
+
 body {
-  background-color: rgb(31, 23, 23);
+  background-color: #7b3005;
   color: #ffffff;
   margin: 0;
   padding-top: 60px; /* height of navbar + some padding */
+}
+
+.toggle-link {
+  margin-top: 15px;
+  color: #ffffff;
+}
+
+.toggle-link a {
+  color: #da7b2d;
+  text-decoration: none;
+}
+
+.toggle-link a:hover {
+  text-decoration: underline;
+}
+
+.forgot-password {
+  display: block;
+  text-align: left;
+  color: #da7b2d;
+  text-decoration: none;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  padding: 8px 15px;
+  border: none;
+  background-color: #ffffff;
+  color: #000000;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  width: 5rem
+}
+
+.nav-btn[data-form="register"] {
+  background-color: #da7b2d;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.nav-btn[data-form="login"] {
+  color: #ff7300;
+  border-radius: 4px;
+  border: 1px solid #ff7300
+}
+
+.nav-btn[data-form="register"]:hover {
+  color: #ff7300;
+  background-color: #fff;
+  border: 1px solid #ff7300
+}
+
+.nav-btn[data-form="login"]:hover {
+  background-color: #da7b2d;
+  color: #ffffff;
 }
 
 /* fonts */
@@ -72,6 +138,7 @@ h1, h2, h3, h4, h5 {
 
 .nav-menu li {
   display: inline-block;
+  margin-top: 5px;
 }
 
 .nav-menu li a {
@@ -91,13 +158,13 @@ h1, h2, h3, h4, h5 {
 
 /*================================ Poster Section =============================*/
 #poster {
-  background-image: url(../images/a1.webp);
+  background-image: url(../images/main-bg.png);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
   width: 100%;
   height: 100vh;
-  min-height: 720px;
+  /* min-height: 720px; */
   position: relative;
   overflow: hidden;
   margin: 0;
@@ -110,9 +177,9 @@ h1, h2, h3, h4, h5 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(34, 22, 22, 0.659) 0%, rgba(0, 0, 0, 0.657) 100%);
+  background: linear-gradient(15deg, rgba(80, 63, 63, 0.522) 0%, rgba(66, 65, 65, 0.298) 10%);
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
 }
 
@@ -120,6 +187,7 @@ h1, h2, h3, h4, h5 {
   text-align: center;
   max-width: 900px;
   padding: 0 30px;
+  margin-top: 8rem;
   animation: textReveal 1.5s ease-out;
 }
 
@@ -170,6 +238,14 @@ h1, h2, h3, h4, h5 {
 }
 
 @media (max-width: 768px) {
+  .nav-buttons {
+    display: block;
+    border-top: 1px solid rgb(157, 153, 153);
+    padding: 1rem;
+    padding-bottom: 5px;
+    gap: 20px;
+  }
+
   #poster h1 {
     font-size: 3.5rem;
   }
@@ -268,30 +344,33 @@ h1, h2, h3, h4, h5 {
 
 
 /*================= Form Section Styles - Works for both Lost and Found pages =========*/
-#form-section {
+#form-section, .auth-container {
   padding: 60px 7%;
-  background-color: #1f1717;
+  background-color: #7b3005;
   color: #ffffff;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+
+}
+
+.auth-form {
+  background: rgba(255,255,255,0.05);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
 .form-header {
   text-align: center;
   margin-bottom: 40px;
-}
-
-.form-header h1 {
-  font-family: FjallaOne-Regular;
-  font-size: 2.5rem;
-  color: #ff944d;
-  margin-bottom: 15px;
-}
-
-.form-header .subtext {
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
 }
 
 /* Form Styles */
@@ -342,7 +421,7 @@ h1, h2, h3, h4, h5 {
 /* Placeholder text - remains light */
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(28, 26, 26, 0.7);
   font-weight: 400;
   font-size: 1rem;
 }
@@ -429,14 +508,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .checkbox input {
-  width: auto;
-  margin-right: 10px;
+  width: 0  ;
 }
 
 .checkbox label {
   margin-bottom: 0;
   font-size: 0.95rem;
   color: #ffffff;
+  cursor: pointer;
 }
 
 .checkbox a {
@@ -471,11 +550,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 1rem;
   }
 
-//* ============================= About Us Page Styles ============================ */
+/* ============================= About Us Page Styles ============================ */
 #about-section {
     padding: 80px 7% 50px;
     margin-top: 0px;
-    background-color: #1f1717;
+    background-color: #7b3005;
     color: #f8f8f8;
 }
 
@@ -501,7 +580,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .mission-section, .team-section, .how-it-works {
-    background: rgba(40, 34, 30, 0.8);
+    background: #823B12;
     padding: 30px;
     border-radius: 8px;
     margin-bottom: 30px;
@@ -545,7 +624,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .member {
     flex: 0 1 250px;
     text-align: center;
-    background: rgba(255,255,255,0.05);
+    /* background: #f9f7f5dd; */
+    background: rgba(255,255,255,0.05); 
     padding: 20px;
     border-radius: 8px;
     transition: transform 0.3s;
@@ -562,7 +642,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .member h3 {
-    color: #ffffff;
+    color: #f9f7f5dd;
     font-size: 1.5rem;
     margin: 10px 0 5px;
     text-shadow: none;
@@ -571,8 +651,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .member-role {
-    color: #ffa366;
-    font-size: 1.1rem;
+    color: #ff944d;
+    font-size: 1.2rem;
     margin-top: 5px;
     line-height: 1.5;
 }
@@ -587,7 +667,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .step {
     flex: 1;
     min-width: 250px;
-    background: rgba(255,255,255,0.05);
+    background: #f9f7f5dd;
     padding: 25px;
     border-radius: 8px;
     text-align: center;
@@ -610,16 +690,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .step h3 {
-    color: #ffa366;
-    font-size: 1.4rem;
+    color: #e46510;
+    font-size: 1.6rem;
     margin-bottom: 15px;
 }
 
 .step p {
-    color: #e0e0e0;
-    font-size: 1.1rem;
+    color: #111111ef;
+    font-size: 1.2rem;
     line-height: 1.7;
     padding: 0 10px;
+    font-weight: bold;
 }
 
 .cta-section {
@@ -675,17 +756,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /*============================== Contact Page Styles =========================*/
 .contact-main {
   padding: 60px 7% 80px;
-  background-color: #1f1717;
+  background-color: #7b3005;
   color: #ffffff;
 }
 
-.contact-header {
+.page-header {
   text-align: center;
   margin-bottom: 60px;
- 
 }
 
-.contact-header h1 {
+.page-header h1,
+.form-header h1,
+.form-title {
   font-family: FjallaOne-Regular;
   font-size: 2.5rem;
   color: #ff944d;
@@ -694,7 +776,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: inline-block;
 }
 
-.contact-header h1::after {
+.form-header h1::after,
+.page-header h1::after,
+.form-title::after {
   content: '';
   position: absolute;
   bottom: -10px;
@@ -705,7 +789,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background: #da7b2d;
 }
 
-.contact-header .subtitle {
+.page-header .subtitle,
+.form-header .subtext {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.8);
   max-width: 700px;
@@ -898,7 +983,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /*====================================== Footer ====================================*/
 /**/
 .site-footer {
-  background: #1a1212;
+  width: 100%;
+  background: #7b3005;
+  /* background-image: url(../images/footer-bg.png); */
   color: #f8f8f8;
   padding: 40px 0 0;
   margin-top: 60px;
@@ -924,7 +1011,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .footer-heading {
   color: #ff944d;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 15px;
   position: relative;
   padding-bottom: 8px;
@@ -953,7 +1040,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .footer-links a {
   color: #d1d1d1;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   transition: color 0.2s;
 }
 
@@ -972,22 +1059,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   color: #d1d1d1;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
 }
 
 .footer-contact i {
   color: #ff944d;
   margin-right: 8px;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   width: 16px;
   text-align: center;
 }
 
-
-
 .copyright {
   color: #a0a0a0;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
 }
 
 .social-links {
@@ -1079,3 +1164,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: #ff6600;
 }
 
+.checkbox input[type="checkbox"] {
+  width: auto;
+  margin-right: 5px;
+}
