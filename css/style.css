@@ -275,7 +275,7 @@ h1, h2, h3, h4, h5 {
 .orange-heading {
   text-align: left;
   font-size: 25px;
-  margin-top: 150px;
+  margin-top: 3rem;
   margin-bottom: 25px;
 }
 
@@ -413,7 +413,7 @@ h1, h2, h3, h4, h5 {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #000000;
 }
@@ -423,7 +423,7 @@ h1, h2, h3, h4, h5 {
 .form-group textarea::placeholder {
   color: rgba(28, 26, 26, 0.7);
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 /* Focus states */
@@ -450,9 +450,7 @@ h1, h2, h3, h4, h5 {
 /* Date input specific styles */
 input[type="date"] {
   color: #000000 !important;
-}
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  width: auto;
 }
 
 /* Textarea styles */
@@ -547,7 +545,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .form-group input,
   .form-group select,
   .form-group textarea {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 
 /* ============================= About Us Page Styles ============================ */
@@ -927,7 +925,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 12px 15px;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   transition: all 0.3s ease;
   background: #f9f9f9;
 }
@@ -988,7 +986,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   /* background-image: url(../images/footer-bg.png); */
   color: #f8f8f8;
   padding: 40px 0 0;
-  margin-top: 60px;
+  margin-top: 10px;
   border-top: 3px solid #ff944d;
 }
 

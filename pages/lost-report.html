@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="../images/favicon/site.webmanifest" />
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <!-- font awesome -->
+  <script src="https://kit.fontawesome.com/3dcfe32b12.js" crossorigin="anonymous"></script>
+  <!-- style -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <title>Lost Item Report | TalashNow</title>
+</head>
+
+<body>
+  <div id="container">
+    <!-- header -->
+    <header>
+      <!-- nav bar / menu -->
+      <nav id="navbar" class="uni-padding">
+        <div class="nav-content">
+          <a href="../index.html" class="logo-link">
+            <img src="../images/TN2b.png" alt="TalashNow Logo" class="logo" />
+          </a>
+          <button class="hamburger" aria-label="Toggle menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+          <!-- <div class="nav-menu"> -->
+            <ul class="nav-menu">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="lost.html">Lost Item</a></li>
+              <li><a href="found.html">Found Item</a></li>
+              <li><a href="about.html">About us</a></li>
+              <li><a href="contact.html">Contact us</a></li>
+            </ul>
+            <div class="nav-buttons nav-menu">
+              <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
+              <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+            </div>
+            <!-- </div> -->
+        </div>
+      </nav>
+    </header>
+
+    <!-- Lost Item Form Section -->
+    <div id="form-section" class="uni-padding">
+      <div class="form-header">
+        <h1>Report a Lost Item</h1>
+        <p class="subtext">Fill out the form below to report your lost item. We'll help you connect with finders.</p>
+      </div>
+
+      <form id="lost-item-form" action="#" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="item-name">Item Name*</label>
+            <input type="text" id="item-name" name="item-name" required placeholder="e.g., Wallet, Phone, Keys">
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category*</label>
+            <select id="category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="electronics">Electronics</option>
+              <option value="jewelry">Jewelry</option>
+              <option value="documents">Documents</option>
+              <option value="clothing">Clothing</option>
+              <option value="bags">Bags & Wallets</option>
+              <option value="keys">Keys</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description*</label>
+          <textarea id="description" name="description" required
+            placeholder="Provide detailed description including brand, color, size, distinguishing features, etc."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="lost-date">Date Lost*</label>
+            <input type="date" id="lost-date" name="lost-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="lost-location">Location Lost*</label>
+            <input type="text" id="lost-location" name="lost-location" required placeholder="Where did you lose it?">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-name">Your Name*</label>
+            <input type="text" id="contact-name" name="contact-name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email">Email*</label>
+            <input type="email" id="contact-email" name="contact-email" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contact-phone">Phone Number*</label>
+            <input type="tel" id="contact-phone" name="contact-phone" required>
+          </div>
+
+          <div class="form-group">
+            <label for="photo">Upload Photo (Optional)</label>
+            <div class="file-upload">
+              <input type="file" id="photo" name="photo" accept="image/*">
+              <label for="photo" class="file-label">
+                <i class="fas fa-camera"></i> Choose File
+              </label>
+              <!-- <span class="file-name">No file chosen</span> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group checkbox">
+          <input type="checkbox" id="agree-terms" name="agree-terms" required>
+          <label for="agree-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+              Policy</a>*</label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">
+            <i class="fas fa-paper-plane"></i> Submit Report
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <!-- Services Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Services</h3>
+            <ul class="footer-links">
+              <li><a href="lost.html">Lost Item Report</a></li>
+              <li><a href="found.html">Found Item Report</a></li>
+              <li><a href="lost.html">AutoMatch Alerts</a></li>
+            </ul>
+          </div>
+
+          <!-- Quick Links Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="lost.html">Lost Items</a></li>
+              <li><a href="found.html">Found Items</a></li>
+              <li><a href="lost.html">Recent Posts</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Contact</h3>
+            <ul class="footer-contact">
+              <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
+              <li><i class="fas fa-phone"></i> +92 300 1234567</li>
+              <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+          <div class="footer-content">
+            <p>&copy; 2025 TalashNow</p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- script -->
+  <script src="../js/scripts.js"></script>
+</body>
+
+</html>

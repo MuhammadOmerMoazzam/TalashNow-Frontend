@@ -146,72 +146,7 @@
   </div>
 
   <!-- script -->
-  <script src="/js/scripts.js"></script>
-
-  <script>
-    // document.addEventListener('DOMContentLoaded', () => {
-    // const hamburger = document.querySelector('.hamburger');
-    // const navMenu = document.querySelector('.nav-menu');
-    // const navButtons = document.querySelector('.nav-buttons');
-
-    // if (hamburger && navMenu) {
-    //   hamburger.addEventListener('click', () => {
-    //     hamburger.classList.toggle('active');
-    //     navMenu.classList.toggle('active');
-    //     // navButtons.classList.toggle('active');
-    //   });
-
-    //   // Close menu when clicking a nav link
-    //   document.querySelectorAll('.nav-menu li a').forEach(link => {
-    //     link.addEventListener('click', () => {
-    //       hamburger.classList.remove('active');
-    //       navMenu.classList.remove('active');
-    //       // navButtons.classList.remove('active');
-    //     });
-    //   });
-
-    //   // Close menu when clicking outside
-    //   document.addEventListener('click', (e) => {
-    //     if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-    //       hamburger.classList.remove('active');
-    //       navMenu.classList.remove('active');
-    //       // navButtons.classList.remove('active');
-    //     }
-    //   });
-    // }
-    // });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const hamburger = document.querySelector('.hamburger');
-      const navMenus = document.querySelectorAll('.nav-menu');
-      const navButtons = document.querySelector('.nav-buttons');
-
-      if (hamburger && navMenus.length > 0) {
-        hamburger.addEventListener('click', () => {
-          hamburger.classList.toggle('active');
-          navMenus.forEach(menu => menu.classList.toggle('active'));
-          if (navButtons) navButtons.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-menu li a').forEach(link => {
-          link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenus.forEach(menu => menu.classList.remove('active'));
-            if (navButtons) navButtons.classList.remove('active');
-          });
-        });
-
-        document.addEventListener('click', (e) => {
-          if (![...navMenus].some(menu => menu.contains(e.target)) && !hamburger.contains(e.target)) {
-            hamburger.classList.remove('active');
-            navMenus.forEach(menu => menu.classList.remove('active'));
-            if (navButtons) navButtons.classList.remove('active');
-          }
-        });
-      }
-    });
-
-  </script>
+  <script src="/js/scripts.js" defer></script>
 </body>
 
 </html>
