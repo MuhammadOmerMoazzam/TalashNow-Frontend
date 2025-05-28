@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="../images/favicon/site.webmanifest" />
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <!-- font awesome -->
+  <script src="https://kit.fontawesome.com/3dcfe32b12.js" crossorigin="anonymous"></script>
+  <!-- style -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <title>Contact Us | TalashNow</title>
+</head>
+
+<body>
+  <div id="container">
+    <!-- header -->
+    <header>
+      <!-- nav bar / menu -->
+      <nav id="navbar" class="uni-padding">
+        <div class="nav-content">
+          <a href="../index.html" class="logo-link">
+            <img src="../images/TN2b.png" alt="TalashNow Logo" class="logo" />
+          </a>
+          <button class="hamburger" aria-label="Toggle menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+          <!-- <div class="nav-menu"> -->
+          <ul class="nav-menu">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="lost.html">Lost Item</a></li>
+            <li><a href="found.html">Found Item</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+          <div class="nav-buttons nav-menu">
+            <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
+            <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+          </div>
+          <!-- </div> -->
+        </div>
+      </nav>
+    </header>
+
+    <!-- Contact Page Content -->
+    <main class="contact-main uni-padding">
+      <div class="page-header">
+        <h1>Get in Touch</h1>
+        <p class="subtitle">We're here to help you with any questions about our lost and found services.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Contact Information -->
+        <div class="contact-info">
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="info-content">
+              <h3>Our Location</h3>
+              <p>Gulshan e Hadeed Bin Qasim Town, Karachi, Pakistan</p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="info-content">
+              <h3>Phone Number</h3>
+              <p>+92 300 1049859</p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="info-content">
+              <h3>Email Address</h3>
+              <p>help@talashnow.com</p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="info-content">
+              <h3>Working Hours</h3>
+              <p>Monday - Saturday: 9AM - 6PM</p>
+              <p>Sunday: 10AM - 4PM</p>
+              <p>Friday: Closed</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+          <h2>Send Us a Message</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <input type="text" id="name" name="name" placeholder="Your Name" required autocomplete="on">
+            </div>
+
+            <div class="form-group">
+              <input type="email" id="email" name="email" placeholder="Your Email" required autocomplete="on">
+            </div>
+
+            <div class="form-group">
+              <input type="text" id="subject" name="subject" placeholder="Subject" required autocomplete="on">
+            </div>
+
+            <div class="form-group">
+              <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <!-- Services Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Services</h3>
+            <ul class="footer-links">
+              <li><a href="lost.html">Lost Item Report</a></li>
+              <li><a href="found.html">Found Item Report</a></li>
+              <li><a href="lost.html">AutoMatch Alerts</a></li>
+            </ul>
+          </div>
+
+          <!-- Quick Links Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="lost.html">Lost Items</a></li>
+              <li><a href="found.html">Found Items</a></li>
+              <li><a href="lost.html">Recent Posts</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Contact</h3>
+            <ul class="footer-contact">
+              <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
+              <li><i class="fas fa-phone"></i> +92 300 1234567</li>
+              <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+          <div class="footer-content">
+            <p>&copy; 2025 TalashNow</p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- script -->
+  <script src="../js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('external hamburger.js: Script loaded');
+      const hamburger = document.querySelector('.hamburger');
+      const navMenu = document.querySelector('.nav-menu');
+
+      if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+          hamburger.classList.toggle('active');
+          navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking a nav link
+        document.querySelectorAll('.nav-menu li a').forEach(link => {
+          link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+          });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
