@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="../images/favicon/site.webmanifest" />
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <!-- font awesome -->
+  <script src="https://kit.fontawesome.com/3dcfe32b12.js" crossorigin="anonymous"></script>
+  <!-- style -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <title>Lost and Found Items | TalashNow</title>
+
+  <style>
+    #item-detail {
+      background-color: #7b3005;
+      color: #ffffff;
+      padding: 60px 15%;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .back-container {
+      margin-bottom: 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .back-link i {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+
+    .back-link:hover {
+      color: #f7a25c;
+    }
+
+    .item-detail-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .item-detail-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 768px) {
+      .item-detail-content {
+        flex-direction: row;
+      }
+    }
+
+    .item-image {
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .item-image {
+        width: 50%;
+      }
+    }
+
+    .item-image img {
+      width: 100%;
+      height: 320px;
+      /* h-80 */
+      object-fit: cover;
+    }
+
+    .item-info {
+      padding: 24px;
+      width: 100%;
+      color: #000000;
+    }
+
+    @media (min-width: 768px) {
+      .item-info {
+        width: 50%;
+      }
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .item-info h1 {
+      font-family: 'FjallaOne-Regular', sans-serif;
+      font-size: 1.5rem;
+      /* text-2xl */
+      color: #000000;
+      font-weight: bold;
+    }
+
+    .status-badges {
+      display: flex;
+      gap: 8px;
+    }
+
+    .status-badge {
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-badge.lost {
+      background-color: rgba(255, 0, 0, 0.1);
+      color: #ff4444;
+    }
+
+    .status-badge.approved {
+      background-color: rgba(0, 128, 0, 0.1);
+      color: #008000;
+    }
+
+    .item-info p {
+      color: #666;
+      font-size: 0.875rem;
+      line-height: 1.25;
+      margin-bottom: 24px;
+    }
+
+    .item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .meta-item i {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      color: #666;
+    }
+
+    .meta-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <nav id="navbar" class="uni-padding">
+        <div class="nav-content">
+          <a href="../index.html" class="logo-link">
+            <img src="../images/TN2b.png" alt="TalashNow Logo" class="logo" />
+          </a>
+          <button class="hamburger" aria-label="Toggle menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+          <!-- <div class="nav-menu"> -->
+          <ul class="nav-menu">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="lost.html">Lost Item</a></li>
+            <li><a href="found.html">Found Item</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+          <div class="nav-buttons nav-menu">
+            <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
+            <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+          </div>
+          <!-- </div> -->
+        </div>
+      </nav>
+    </header>
+
+    <section id="item-detail" class="uni-padding">
+      <div class="back-container">
+        <a href="/pages/lost.html" class="back-link">
+          <i class="fas fa-arrow-left"></i> Back
+        </a>
+      </div>
+      <div class="item-detail-card">
+        <div class="item-detail-content">
+          <div class="item-image">
+            <img src="https://images.pexels.com/photos/10984952/pexels-photo-10984952.jpeg" alt="Gold Necklace">
+          </div>
+          <div class="item-info">
+            <div class="item-header">
+              <h1>Gold Necklace</h1>
+              <div class="status-badges">
+                <span class="status-badge lost">Lost</span>
+                <span class="status-badge approved">Approved</span>
+              </div>
+            </div>
+            <p>Gold necklace with a heart pendant. Has sentimental value.</p>
+            <div class="item-meta">
+              <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>May 12, 2023</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-map-pin"></i>
+                <span>Gym Locker Room</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-tag"></i>
+                <span>Accessories</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span>Posted on May 12, 2023</span>
+              </div>
+              <div class="meta-item">
+                <i class="fas fa-user"></i>
+                <span>Contact: jane@example.com</span>
+              </div>
+            </div>
+            <a href="lost.html" class="btn btn-orange" style="width: 100%; text-align: center; margin-top: 1rem;">I Lost This Item</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <!-- Services Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Services</h3>
+            <ul class="footer-links">
+              <li><a href="lost.html">Lost Item Report</a></li>
+              <li><a href="found.html">Found Item Report</a></li>
+              <li><a href="lost.html">AutoMatch Alerts</a></li>
+            </ul>
+          </div>
+
+          <!-- Quick Links Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="lost.html">Lost Items</a></li>
+              <li><a href="found.html">Found Items</a></li>
+              <li><a href="lost.html">Recent Posts</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Contact</h3>
+            <ul class="footer-contact">
+              <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
+              <li><i class="fas fa-phone"></i> +92 300 1234567</li>
+              <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+          <div class="footer-content">
+            <p>&copy; 2025 TalashNow</p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../js/scripts.js"></script>
+</body>
+
+</html>

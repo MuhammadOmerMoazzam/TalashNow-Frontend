@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- favicon -->
+  <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="../images/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="../images/favicon/site.webmanifest" />
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <!-- font awesome -->
+  <script src="https://kit.fontawesome.com/3dcfe32b12.js" crossorigin="anonymous"></script>
+  <!-- style -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="stylesheet" href="../css/items.css" />
+  <title>Lost Item | TalashNow</title>
+
+
+</head>
+
+<body>
+  <div id="container">
+    <!-- header -->
+    <header>
+      <!-- nav bar / menu -->
+      <nav id="navbar" class="uni-padding">
+        <div class="nav-content">
+          <a href="../index.html" class="logo-link">
+            <img src="../images/TN2b.png" alt="TalashNow Logo" class="logo" />
+          </a>
+          <button class="hamburger" aria-label="Toggle menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+          <ul class="nav-menu">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="lost.html">Lost Item</a></li>
+            <li><a href="found.html">Found Item</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+          <div class="nav-buttons nav-menu">
+            <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
+            <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section id="lost-items" class="uni-padding">
+      <div class="content-header">
+        <div class="header-text">
+          <h1>Lost Items</h1>
+          <p>Browse through items that people have reported as lost</p>
+        </div>
+        <div class="header-action">
+          <a href="/pages/lost-report.html">
+            <button type="button" class="btn btn-orange">
+              <i class="fas fa-exclamation-circle mr-2"></i> Report Lost Item
+            </button>
+          </a>
+        </div>
+      </div>
+
+      <div class="search-filter">
+        <form>
+          <div class="form-content">
+            <div class="search-input">
+              <div class="search-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <input type="text" id="search" placeholder="Search lost items..." value="">
+            </div>
+            <div class="action-buttons">
+              <button type="button" class="filter-btn" id="filter-toggle">
+                <i class="fas fa-filter mr-2"></i> Show Filters
+              </button>
+              <button type="submit" class="search-btn">Search</button>
+            </div>
+          </div>
+          <div class="filter-section" id="filter-section">
+            <div class="filter-row">
+              <div class="filter-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                  <option value="">Select an option</option>
+                  <option value="accessories">Accessories</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="clothing">Clothing</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="location">Location</label>
+                <select id="location" name="location">
+                  <option value="">Select an option</option>
+                  <option value="gym">Gym Locker Room</option>
+                  <option value="park">Park</option>
+                  <option value="office">Office</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-row">
+              <div class="filter-group form-group">
+                <label for="from-date">From Date</label>
+                <input type="date" id="from-date" name="from-date" value="">
+              </div>
+              <div class="filter-group form-group">
+                <label for="to-date">To Date</label>
+                <input type="date" id="to-date" name="to-date" value="">
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button type="button" class="clear-btn" id="clear-filters">Clear Filters</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="items-grid">
+        <h2>Showing 1 Lost Item</h2>
+        <div class="grid">
+          <div class="item-card">
+            <a href="item-detail.html?id=4">
+              <div class="item-image">
+                <img src="https://images.pexels.com/photos/10984952/pexels-photo-10984952.jpeg" alt="Gold Necklace">
+                <span class="status-badge lost">Lost</span>
+              </div>
+              <div class="item-details">
+                <div class="item-header">
+                  <h3>Gold Necklace</h3>
+                  <span class="status-badge approved">Approved</span>
+                </div>
+                <p>Gold necklace with a heart pendant. Has sentimental value.</p>
+                <div class="item-meta">
+                  <div class="meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>May 12, 2023</span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="fas fa-map-pin"></i>
+                    <span>Gym Locker Room</span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="fas fa-tag"></i>
+                    <span>Accessories</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <!-- Services Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Services</h3>
+            <ul class="footer-links">
+              <li><a href="lost.html">Lost Item Report</a></li>
+              <li><a href="found.html">Found Item Report</a></li>
+              <li><a href="lost.html">AutoMatch Alerts</a></li>
+            </ul>
+          </div>
+
+          <!-- Quick Links Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="lost.html">Lost Items</a></li>
+              <li><a href="found.html">Found Items</a></li>
+              <li><a href="lost.html">Recent Posts</a></li>
+            </ul>
+          </div>
+
+          <!-- Contact Column -->
+          <div class="footer-column">
+            <h3 class="footer-heading">Contact</h3>
+            <ul class="footer-contact">
+              <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
+              <li><i class="fas fa-phone"></i> +92 300 1234567</li>
+              <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+          <div class="footer-content">
+            <p>&copy; 2025 TalashNow</p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="../js/scripts.js" defer></script>
+</body>
+
+</html>
