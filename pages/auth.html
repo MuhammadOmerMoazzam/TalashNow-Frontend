@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- First load auth-utils.js to immediately apply authentication state -->
+  <script src="../js/auth-utils.js"></script>
   <!-- favicon -->
   <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
@@ -13,8 +14,7 @@
   <!-- Google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
   <!-- font awesome -->
   <script src="https://kit.fontawesome.com/3dcfe32b12.js" crossorigin="anonymous"></script>
   <!-- style -->
@@ -22,7 +22,6 @@
   <link rel="stylesheet" href="../css/responsive.css" />
   <title>Login/Register | TalashNow</title>
 </head>
-
 <body>
   <header>
     <nav id="navbar" class="uni-padding">
@@ -35,78 +34,79 @@
           <span class="bar"></span>
           <span class="bar"></span>
         </button>
-        <!-- <div class="nav-menu"> -->
-          <ul class="nav-menu">
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="lost.html">Lost Item</a></li>
-            <li><a href="found.html">Found Item</a></li>
-            <li><a href="about.html">About us</a></li>
-            <li><a href="contact.html">Contact us</a></li>
-          </ul>
-          <div class="nav-buttons nav-menu">
-            <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
-            <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+        <ul class="nav-menu">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="lost.html">Lost Item</a></li>
+          <li><a href="found.html">Found Item</a></li>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="contact.html">Contact us</a></li>
+        </ul>
+        <div class="nav-buttons nav-menu">
+          <div id="auth-buttons">
+            <a href="/pages/auth.html?form=login" id="login-btn"><button class="nav-btn" data-form="login">Login</button></a>
+            <a href="/pages/auth.html?form=register" id="register-btn"><button class="nav-btn" data-form="register">Register</button></a>
           </div>
-          <!-- </div> -->
+          <div id="user-buttons" style="display: none;">
+            <a href="/pages/dashboard.html"><button class="nav-btn">Dashboard</button></a>
+            <button class="nav-btn" id="logout-btn">Logout</button>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
 
+  <!-- Notification Popup -->
+  <div id="notification"></div>
+
   <!-- Authentication Container -->
-  <div class="auth-container">
+  <div class="auth-container wrapper">
     <div class="auth-form" id="login-form">
       <div class="form-title">
         <i class="fas fa-sign-in-alt"></i> Login
       </div>
-      <form action="#" method="POST">
+      <form id="loginForm" action="#" method="POST">
         <div class="form-group">
           <label for="login-email">Email *</label>
-          <input type="email" id="login-email" name="login-email" placeholder="Enter your email" required
-            autocomplete="on">
+          <input type="email" id="login-email" name="login-email" placeholder="Enter your email" required autocomplete="on">
         </div>
         <div class="form-group">
           <label for="login-password">Password *</label>
-          <input type="password" id="login-password" name="login-password" placeholder="Enter your password" required
-            autocomplete="on">
+          <input type="password" id="login-password" name="login-password" placeholder="Enter your password" required autocomplete="on">
         </div>
         <div class="form-group">
           <a href="#" class="forgot-password">Forgot password?</a>
         </div>
         <button type="submit" class="submit-btn">Login</button>
       </form>
-      <p class="toggle-link">Don't have an account? <a href="#" data-form="register">Register</a></p>
+      <p class="toggle-link">Don't have an account? <a href="?form=register" data-form="register">Register</a></p>
     </div>
 
-    <div class="auth-form" id="register-form" style="display: none;">
+    <div class="auth-form" id="register-form">
       <div class="form-title">
         <i class="fas fa-user-plus"></i> Register
       </div>
-      <form action="#" method="POST">
+      <form id="registerForm" action="#" method="POST">
         <div class="form-group">
           <label for="register-name">Full Name *</label>
-          <input type="text" id="register-name" name="register-name" placeholder="Enter your full name" required
-            autocomplete="on">
+          <input type="text" id="register-name" name="register-name" placeholder="Enter your full name" required autocomplete="on">
         </div>
         <div class="form-group">
           <label for="register-email">Email *</label>
-          <input type="email" id="register-email" name="register-email" placeholder="Enter your email" required
-            autocomplete="on">
+          <input type="email" id="register-email" name="register-email" placeholder="Enter your email" required autocomplete="on">
         </div>
         <div class="form-group">
           <label for="register-password">Password *</label>
-          <input type="password" id="register-password" name="register-password" placeholder="Create a password"
-            required autocomplete="on">
+          <input type="password" id="register-password" name="register-password" placeholder="Create a password" required autocomplete="on">
         </div>
         <button type="submit" class="submit-btn">Register</button>
       </form>
-      <p class="toggle-link">Already have an account? <a href="#" data-form="login">Login</a></p>
+      <p class="toggle-link">Already have an account? <a href="?form=login" data-form="login">Login</a></p>
     </div>
   </div>
 
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-grid">
-        <!-- Services Column -->
         <div class="footer-column">
           <h3 class="footer-heading">Services</h3>
           <ul class="footer-links">
@@ -115,8 +115,6 @@
             <li><a href="lost.html">AutoMatch Alerts</a></li>
           </ul>
         </div>
-
-        <!-- Quick Links Column -->
         <div class="footer-column">
           <h3 class="footer-heading">Quick Links</h3>
           <ul class="footer-links">
@@ -126,19 +124,15 @@
             <li><a href="lost.html">Recent Posts</a></li>
           </ul>
         </div>
-
-        <!-- Contact Column -->
         <div class="footer-column">
           <h3 class="footer-heading">Contact</h3>
           <ul class="footer-contact">
             <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
             <li><i class="fas fa-phone"></i> +92 300 1234567</li>
-            <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+            <li><i class="fas fa-envelope"></i> help@talashnow.com</li>
           </ul>
         </div>
       </div>
-
-      <!-- Footer Bottom -->
       <div class="footer-bottom">
         <div class="footer-content">
           <p>&copy; 2025 TalashNow</p>
@@ -152,15 +146,41 @@
     </div>
   </footer>
 
+  <script src="../js/api.js"></script>
   <script src="../js/scripts.js"></script>
   <script>
-    
     document.addEventListener('DOMContentLoaded', () => {
       const forms = document.querySelectorAll('.auth-form');
       const toggleLinks = document.querySelectorAll('.toggle-link a');
       const navButtons = document.querySelectorAll('.nav-btn');
+      const notification = document.getElementById('notification');
 
-      forms.forEach(form => form.id === 'login-form' ? form.style.display = 'block' : form.style.display = 'none');
+      // Check if user is already authenticated
+      const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+      if (isAuthenticated) {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      function showNotification(message, type = 'success') {
+        notification.textContent = message;
+        notification.className = type;
+        notification.classList.add('show');
+        setTimeout(() => {
+          notification.classList.remove('show');
+          notification.textContent = '';
+          notification.className = '';
+        }, 4000);
+      }
+
+      function showFormFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const formType = urlParams.get('form') || 'login';
+        forms.forEach(form => {
+          form.style.display = form.id === `${formType}-form` ? 'block' : 'none';
+        });
+      }
+      showFormFromURL();
 
       toggleLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -169,46 +189,100 @@
           forms.forEach(form => {
             form.style.display = form.id === `${targetForm}-form` ? 'block' : 'none';
           });
+          window.history.replaceState(null, null, `?form=${targetForm}`);
         });
       });
 
       navButtons.forEach(button => {
+        if (!button.getAttribute('data-form')) return;
+        
         button.addEventListener('click', (e) => {
           const targetForm = button.getAttribute('data-form');
+          if (!targetForm) return;
+          
           forms.forEach(form => {
             form.style.display = form.id === `${targetForm}-form` ? 'block' : 'none';
           });
+          window.history.replaceState(null, null, `?form=${targetForm}`);
         });
       });
-    });
 
-      console.log('external hamburger.js: Script loaded');
-      const hamburger = document.querySelector('.hamburger');
-      const navMenu = document.querySelector('.nav-menu');
+      // Login form submission
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
 
-      if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-          hamburger.classList.toggle('active');
-          navMenu.classList.toggle('active');
-        });
-
-        // Close menu when clicking a nav link
-        document.querySelectorAll('.nav-menu li a').forEach(link => {
-          link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-          });
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-          if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+        try {
+          const response = await authAPI.login(email, password);
+          console.log('Login response:', response);
+          
+          if (response.success) {
+            // IMMEDIATELY set authentication state in localStorage
+            localStorage.setItem('isAuthenticated', 'true');
+            
+            // Set global state variable
+            window.TalashNow = window.TalashNow || {};
+            window.TalashNow.isAuthenticated = true;
+            
+            // IMMEDIATELY update UI 
+            const authButtons = document.getElementById('auth-buttons');
+            const userButtons = document.getElementById('user-buttons');
+            
+            if (authButtons && userButtons) {
+              authButtons.style.display = 'none';
+              userButtons.style.display = 'block';
+            }
+            
+            // Add !important style to ensure it takes precedence
+            const style = document.createElement('style');
+            style.textContent = `
+              #auth-buttons { display: none !important; }
+              #user-buttons { display: block !important; }
+            `;
+            document.head.appendChild(style);
+            
+            // Show success notification
+            showNotification('Login successful!', 'success');
+            
+            // Redirect after a delay, using the location.replace to avoid history issues
+            setTimeout(() => {
+              window.location.replace('/pages/dashboard.html');
+            }, 1500);
+          } else {
+            showNotification(`Login failed: ${response.message || 'Invalid credentials'}`, 'error');
           }
-        });
-      }
+        } catch (error) {
+          console.error('Login error:', error);
+          showNotification(`Login failed: ${error.message || 'An error occurred'}`, 'error');
+        }
+      });
+
+      // Register form submission
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+
+        try {
+          const response = await authAPI.register(name, email, password);
+          if (response.success) {
+            showNotification('Registration successful! Please login.', 'success');
+            setTimeout(() => {
+              forms.forEach(form => {
+                form.style.display = form.id === 'login-form' ? 'block' : 'none';
+              });
+              window.history.replaceState(null, null, `?form=login`);
+            }, 1500);
+          } else {
+            showNotification(`Registration failed: ${response.message || 'Please try again'}`, 'error');
+          }
+        } catch (error) {
+          showNotification(`Registration failed: ${error.message || 'An error occurred'}`, 'error');
+        }
+      });
+    });
   </script>
 </body>
-
 </html>

@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- First load auth-utils.js to immediately apply authentication state -->
+  <script src="../js/auth-utils.js"></script>
   <!-- favicon -->
   <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
@@ -24,6 +26,9 @@
 </head>
 
 <body>
+  <!-- Notification Container -->
+  <div id="notification"></div>
+  
   <div id="container">
     <!-- header -->
     <header>
@@ -38,19 +43,23 @@
             <span class="bar"></span>
             <span class="bar"></span>
           </button>
-          <!-- <div class="nav-menu"> -->
-            <ul class="nav-menu">
-              <li><a href="../index.html">Home</a></li>
-              <li><a href="lost.html">Lost Item</a></li>
-              <li><a href="found.html">Found Item</a></li>
-              <li><a href="about.html">About us</a></li>
-              <li><a href="contact.html">Contact us</a></li>
-            </ul>
-            <div class="nav-buttons nav-menu">
-              <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
-              <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+          <ul class="nav-menu">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="lost.html">Lost Item</a></li>
+            <li><a href="found.html">Found Item</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+          <div class="nav-buttons nav-menu">
+            <div id="auth-buttons">
+              <a href="/pages/auth.html?form=login"><button class="nav-btn" data-form="login">Login</button></a>
+              <a href="/pages/auth.html?form=register"><button class="nav-btn" data-form="register">Register</button></a>
             </div>
-            <!-- </div> -->
+            <div id="user-buttons" style="display: none;">
+              <a href="/pages/dashboard.html"><button class="nav-btn">Dashboard</button></a>
+              <button class="nav-btn" id="logout-btn">Logout</button>
+            </div>
+          </div>
         </div>
       </nav>
     </header>
@@ -62,7 +71,7 @@
         <p class="subtext">Fill out the form below to report your lost item. We'll help you connect with finders.</p>
       </div>
 
-      <form id="lost-item-form" action="#" method="POST">
+      <form id="lostItemForm" action="#" method="POST">
         <div class="form-row">
           <div class="form-group">
             <label for="item-name">Item Name*</label>
@@ -104,22 +113,9 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="contact-name">Your Name*</label>
-            <input type="text" id="contact-name" name="contact-name" required>
+            <label for="contact-email">Contact Information (Email)*</label>
+            <input type="email" id="contact-email" name="contact-email" required placeholder="Enter email address">
           </div>
-
-          <div class="form-group">
-            <label for="contact-email">Email*</label>
-            <input type="email" id="contact-email" name="contact-email" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="contact-phone">Phone Number*</label>
-            <input type="tel" id="contact-phone" name="contact-phone" required>
-          </div>
-
           <div class="form-group">
             <label for="photo">Upload Photo (Optional)</label>
             <div class="file-upload">
@@ -127,7 +123,7 @@
               <label for="photo" class="file-label">
                 <i class="fas fa-camera"></i> Choose File
               </label>
-              <!-- <span class="file-name">No file chosen</span> -->
+              <span class="file-name" id="file-name">No file chosen</span>
             </div>
           </div>
         </div>
@@ -176,7 +172,7 @@
             <ul class="footer-contact">
               <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
               <li><i class="fas fa-phone"></i> +92 300 1234567</li>
-              <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+              <li><i class="fas fa-envelope"></i> help@talashnow.com</li>
             </ul>
           </div>
         </div>
@@ -198,7 +194,219 @@
   </div>
 
   <!-- script -->
+  <script src="../js/api.js"></script>
   <script src="../js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if user is authenticated
+      const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+      if (!isAuthenticated) {
+        showNotification('Please login to report a lost item', 'error');
+        setTimeout(() => {
+          window.location.href = '/pages/auth.html?form=login';
+        }, 2000);
+        return;
+      }
+      
+      // Show file name when selected
+      const fileInput = document.getElementById('photo');
+      const fileNameDisplay = document.getElementById('file-name');
+      if (fileInput && fileNameDisplay) {
+        fileInput.addEventListener('change', () => {
+          if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+          } else {
+            fileNameDisplay.textContent = 'No file chosen';
+          }
+        });
+      }
+      
+      // Handle form submission
+      const form = document.getElementById('lostItemForm');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          try {
+            // Validate form data
+            const itemName = document.getElementById('item-name').value.trim();
+            if (!itemName) {
+              // Focus the item name input and show error
+              document.getElementById('item-name').focus();
+              showNotification('Item name cannot be empty', 'error');
+              return;
+            }
+            
+            // Validate other required fields
+            const category = document.getElementById('category').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const lostDate = document.getElementById('lost-date').value.trim();
+            const lostLocation = document.getElementById('lost-location').value.trim();
+            const contactEmail = document.getElementById('contact-email').value.trim();
+            
+            if (!category) {
+              document.getElementById('category').focus();
+              showNotification('Please select a category', 'error');
+              return;
+            }
+            
+            if (!description) {
+              document.getElementById('description').focus();
+              showNotification('Please provide a description', 'error');
+              return;
+            }
+            
+            if (!lostDate) {
+              document.getElementById('lost-date').focus();
+              showNotification('Please select the date when the item was lost', 'error');
+              return;
+            }
+            
+            if (!lostLocation) {
+              document.getElementById('lost-location').focus();
+              showNotification('Please provide the location where the item was lost', 'error');
+              return;
+            }
+            
+            if (!contactEmail) {
+              document.getElementById('contact-email').focus();
+              showNotification('Please provide your contact email', 'error');
+              return;
+            }
+            
+            // Show loading state
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            
+            // Get form data with both name and title fields to be safe
+            const itemData = {
+              name: itemName,          // Backend expects this
+              title: itemName,         // Keep this for backward compatibility
+              type: 'LOST',            // Explicitly set type
+              category: category,
+              description: description,
+              date: lostDate,
+              location: lostLocation,
+              contactEmail: contactEmail
+            };
+            
+            // Debug output to console
+            console.log('Lost item data to submit:', JSON.stringify(itemData, null, 2));
+            
+            // Handle photo upload if there is one
+            const photo = document.getElementById('photo').files[0];
+            if (photo) {
+              try {
+                const uploadResult = await itemsAPI.uploadImage(photo);
+                if (uploadResult.success) {
+                  itemData.photoBase64 = uploadResult.data.imageUrl;
+                }
+              } catch (uploadError) {
+                console.error('Photo upload error:', uploadError);
+                // Continue without photo
+              }
+            }
+            
+            // Try a direct fetch approach instead of using the API abstraction
+            try {
+              const API_BASE_URL = 'http://localhost:8080/api';
+              
+              // Create a request payload matching the LostItem Java model exactly
+              const serverRequestPayload = {
+                itemName: itemName,         // This is the field name in the Java model
+                category: category,
+                description: description,
+                dateLost: lostDate,        // Field name in Java model is dateLost
+                location: lostLocation,
+                contactEmail: contactEmail,
+                photoBase64: itemData.photoBase64
+              };
+              
+              console.log('Matching Java model payload:', JSON.stringify(serverRequestPayload, null, 2));
+              
+              const response = await fetch(`${API_BASE_URL}/lost-items`, {
+                method: 'POST',
+                headers: { 
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(serverRequestPayload)
+              });
+              
+              // Log the raw response
+              console.log('Raw response status:', response.status);
+              console.log('Raw response headers:', [...response.headers.entries()]);
+              
+              let responseData;
+              try {
+                const responseText = await response.text();
+                console.log('Raw response text:', responseText);
+                
+                // Try to parse as JSON if possible
+                try {
+                  responseData = JSON.parse(responseText);
+                } catch (jsonError) {
+                  responseData = { success: false, message: responseText };
+                }
+              } catch (textError) {
+                responseData = { success: false, message: 'Failed to read response' };
+              }
+              
+              console.log('Processed response data:', responseData);
+              
+              if (response.ok) {
+                showNotification('Lost item reported successfully!', 'success');
+                setTimeout(() => {
+                  window.location.href = '/pages/lost.html';
+                }, 2000);
+              } else {
+                // Restore submit button
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+                
+                // Show error message
+                const errorMessage = responseData.message || 'An unknown error occurred';
+                showNotification(`Failed to report item: ${errorMessage}`, 'error');
+              }
+            } catch (fetchError) {
+              console.error('Direct fetch error:', fetchError);
+              // Fall back to the API method if direct fetch fails
+              const result = await itemsAPI.createLostItem(itemData);
+              console.log('API fallback response:', result);
+              
+              if (result.success) {
+                showNotification('Lost item reported successfully!', 'success');
+                setTimeout(() => {
+                  window.location.href = '/pages/lost.html';
+                }, 2000);
+              } else {
+                // Restore submit button
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+                
+                // Show error message
+                const errorMessage = result.message || 'An unknown error occurred';
+                showNotification(`Failed to report item: ${errorMessage}`, 'error');
+              }
+            }
+          } catch (error) {
+            console.error('Error submitting lost item form:', error);
+            showNotification(`Error: ${error.message || 'An unknown error occurred'}`, 'error');
+            
+            // Restore submit button if it exists
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+              submitButton.disabled = false;
+              submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
+            }
+          }
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>
