@@ -4,6 +4,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- First load auth-utils.js to immediately apply authentication state -->
+  <script src="../js/auth-utils.js"></script>
+  <!-- Initial style to prevent button flicker -->
+  <style>
+    /* Hide auth buttons by default until auth state is determined */
+    #auth-buttons, #user-buttons {
+      transition: none !important;
+      visibility: hidden;
+      opacity: 0;
+    }
+    /* This class will be added by JavaScript after auth state is determined */
+    #auth-buttons.auth-visible, #user-buttons.auth-visible {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
   <!-- favicon -->
   <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
@@ -47,8 +63,14 @@
             <li><a href="contact.html">Contact us</a></li>
           </ul>
           <div class="nav-buttons nav-menu">
-            <a href="/pages/auth.html"><button class="nav-btn" data-form="login">Login</button></a>
-            <a href="/pages/auth.html#"><button class="nav-btn" data-form="register">Register</button></a>
+            <div id="auth-buttons">
+              <a href="/pages/auth.html?form=login"><button class="nav-btn" data-form="login">Login</button></a>
+              <a href="/pages/auth.html?form=register"><button class="nav-btn" data-form="register">Register</button></a>
+            </div>
+            <div id="user-buttons" style="display: none;">
+              <a href="/pages/dashboard.html"><button class="nav-btn">Dashboard</button></a>
+              <button class="nav-btn" id="logout-btn">Logout</button>
+            </div>
           </div>
           <!-- </div> -->
         </div>
@@ -156,7 +178,7 @@
             <ul class="footer-contact">
               <li><i class="fas fa-map-marker-alt"></i> AT245 Phase 2 Bin Qasim Town</li>
               <li><i class="fas fa-phone"></i> +92 300 1234567</li>
-              <li><i class="fas fa-envelope"></i> help@lostfoundhub.com</li>
+              <li><i class="fas fa-envelope"></i> help@talashnow.com</li>
             </ul>
           </div>
         </div>
@@ -178,6 +200,7 @@
   </div>
 
   <!-- script-->
+  <script src="../js/api.js"></script>
   <script src="../js/scripts.js"></script>
 </body>
 
