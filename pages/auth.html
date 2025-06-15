@@ -221,9 +221,49 @@
             // IMMEDIATELY set authentication state in localStorage
             localStorage.setItem('isAuthenticated', 'true');
             
+            // Store user data from response
+            if (response.data && (response.data.user || response.data)) {
+              const userData = response.data.user || response.data;
+              console.log('Storing user data:', userData);
+              
+              // Check if we need to transform the data before storing
+              if (userData._id && typeof userData._id === 'string') {
+                // If the _id is a string but looks like a MongoDB ObjectId, convert it to the proper format
+                if (userData._id.match(/^[0-9a-f]{24}$/)) {
+                  console.log('Converting string ID to MongoDB ObjectId format:', userData._id);
+                  userData._id = { $oid: userData._id };
+                }
+              }
+              
+              try {
+                localStorage.setItem('userData', JSON.stringify(userData));
+                console.log('User data stored in localStorage');
+                
+                // Also store any token if provided
+                if (response.data.token) {
+                  localStorage.setItem('token', response.data.token);
+                  console.log('Stored authentication token');
+                }
+              } catch (storageError) {
+                console.error('Error storing user data:', storageError);
+              }
+            } else {
+              console.warn('No user data in login response to store');
+            }
+            
             // Set global state variable
             window.TalashNow = window.TalashNow || {};
             window.TalashNow.isAuthenticated = true;
+            
+            // Try to set user data in global state
+            try {
+              const userDataStr = localStorage.getItem('userData');
+              if (userDataStr) {
+                window.TalashNow.userData = JSON.parse(userDataStr);
+              }
+            } catch (e) {
+              console.error('Error parsing user data for global state:', e);
+            }
             
             // IMMEDIATELY update UI 
             const authButtons = document.getElementById('auth-buttons');
@@ -268,6 +308,28 @@
         try {
           const response = await authAPI.register(name, email, password);
           if (response.success) {
+            // Store user data from response if available
+            if (response.data && (response.data.user || response.data)) {
+              const userData = response.data.user || response.data;
+              console.log('Storing user data from registration:', userData);
+              
+              try {
+                localStorage.setItem('userData', JSON.stringify(userData));
+                
+                // Also store any token if provided
+                if (response.data.token) {
+                  localStorage.setItem('token', response.data.token);
+                  console.log('Stored authentication token from registration');
+                }
+                
+                // Set global state
+                window.TalashNow = window.TalashNow || {};
+                window.TalashNow.userData = userData;
+              } catch (storageError) {
+                console.error('Error storing user data from registration:', storageError);
+              }
+            }
+            
             showNotification('Registration successful! Please login.', 'success');
             setTimeout(() => {
               forms.forEach(form => {

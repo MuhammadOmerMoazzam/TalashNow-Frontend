@@ -1,5 +1,5 @@
 #lost-items, #found-items {
-  padding: 60px 7%;
+  padding: 20px 7%;
 }
 
 .content-header {
@@ -145,6 +145,26 @@
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.filter-section.show {
+  display: block;
+  max-height: 500px; /* Adjust based on content */
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .filter-row {
@@ -282,7 +302,7 @@
 }
 
 .item-details {
-  padding: 16px;
+  padding: 16px 5px;
 }
 
 .item-header {
@@ -293,7 +313,7 @@
 }
 
 .item-details h3 {
-  font-size: 1.125rem;
+  font-size: 1.3rem;
   color: #000000;
   font-weight: 600;
   white-space: nowrap;
@@ -302,8 +322,8 @@
 }
 
 .item-details p {
-  color: #666;
-  font-size: 0.875rem;
+  color: #525151;
+  font-size: 1rem;
   line-height: 1.25;
   display: -webkit-box;
   /* -webkit-line-clamp: 2; */
@@ -317,7 +337,7 @@
   flex-direction: column;
   gap: 8px;
   color: #666;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 .meta-item {
@@ -329,7 +349,7 @@
   width: 16px;
   height: 16px;
   margin-right: 8px;
-  color: #666;
+  color: #f1711b;
 }
 
 .meta-item span {

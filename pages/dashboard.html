@@ -39,7 +39,7 @@
     .dashboard-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 20px 7px;
       font-family: 'Roboto', sans-serif;
     }
     .dashboard-header {
@@ -76,25 +76,26 @@
       text-align: center;
     }
     .stat-card h3 {
-      font-size: 18px;
+      font-size: 1.3rem;
       font-weight: 500;
       margin-bottom: 10px;
-      color: #333;
+      color: #000000c8;
     }
     .stat-card .count {
       display: inline-block;
       background: #e0e7ff;
-      color: #6366f1;
+      color: #4c4ffa;
       border-radius: 50%;
       width: 30px;
       height: 30px;
       line-height: 30px;
-      font-size: 14px;
+      font-size: 1.2rem;
+      font-weight: bold;
       margin-bottom: 10px;
     }
     .stat-card p {
-      font-size: 14px;
-      color: #666;
+      font-size: 1.1rem;
+      color: #121212;
     }
     .section {
       background: white;
@@ -112,22 +113,36 @@
     }
     .empty-state {
       text-align: center;
-      padding: 20px;
-      color: #666;
+      padding: 20px 10px;
+      color: #ebe9e9;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      hyphens: auto;
     }
     .empty-state p {
-      font-size: 16px;
+      font-size: 1.2rem;
       margin-bottom: 20px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
     }
     .empty-state .btn {
       padding: 10px 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
       background: white;
-      font-size: 14px;
+      font-size: 1.2rem;
       cursor: pointer;
       text-decoration: none;
       color: #333;
+      display: inline-block;
+      white-space: normal;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .report-list, .claim-list {
       display: none; /* Hidden until data is loaded */
@@ -154,21 +169,6 @@
       padding: 20px;
     }
 
-    .dashboard-header {
-      margin-bottom: 30px;
-    }
-
-    .dashboard-header h1 {
-      font-size: 2.5rem;
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    .dashboard-header .subtext {
-      color: #666;
-      font-size: 1.1rem;
-    }
-
     .dashboard-tabs {
       display: flex;
       gap: 20px;
@@ -182,14 +182,14 @@
       border: none;
       background: none;
       font-size: 1.1rem;
-      color: #666;
+      color: #e4e1e1;
       cursor: pointer;
       position: relative;
       transition: color 0.3s ease;
     }
 
     .tab-btn:hover {
-      color: #333;
+      color: #007bff;
     }
 
     .tab-btn.active {
@@ -306,6 +306,59 @@
       background: #f8f9fa;
       border-radius: 8px;
     }
+    
+    /* Claim styles */
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .status-badge.pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-badge.approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .status-badge.rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    .claim-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .btn-approve {
+      background-color: #28a745;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .btn-reject {
+      background-color: #dc3545;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .btn-approve:disabled, .btn-reject:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
   </style>
   <title>Dashboard | TalashNow</title>
 </head>
@@ -348,13 +401,32 @@
     <div id="dashboard-section" class="uni-padding">
       <div class="dashboard-header">
         <h1>My Dashboard</h1>
-        <p class="subtext">Manage your lost and found item reports</p>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-card">
+          <h3>Lost Items</h3>
+          <div class="count" id="lost-count">0</div>
+          <p>Items you&apos;ve reported as lost</p>
+        </div>
+        <div class="stat-card">
+          <h3>Found Items</h3>
+          <div class="count" id="found-count">0</div>
+          <p>Items you&apos;ve reported as found</p>
+        </div>
+        <div class="stat-card">
+          <h3>Claims</h3>
+          <div class="count" id="claim-count">0</div>
+          <p>Claims you&apos;ve submitted</p>
+        </div>
       </div>
 
       <div class="dashboard-content">
         <div class="dashboard-tabs">
           <button class="tab-btn active" data-tab="lost-items">Lost Items</button>
           <button class="tab-btn" data-tab="found-items">Found Items</button>
+          <button class="tab-btn" data-tab="claims">Claims</button>
+          <button class="tab-btn" data-tab="received-claims">Received Claims</button>
         </div>
 
         <div class="tab-content">
@@ -369,67 +441,19 @@
               <!-- Found items will be loaded here -->
             </div>
           </div>
+          
+          <div id="claims" class="tab-pane">
+            <div class="items-grid" id="claims-grid">
+              <!-- Claims will be loaded here -->
+            </div>
+          </div>
+          
+          <div id="received-claims" class="tab-pane">
+            <div class="items-grid" id="received-claims-grid">
+              <!-- Received claims will be loaded here -->
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="stats">
-      <div class="stat-card">
-        <h3>Lost Items</h3>
-        <div class="count" id="lost-count">0</div>
-        <p>Items you&apos;ve reported as lost</p>
-      </div>
-      <div class="stat-card">
-        <h3>Found Items</h3>
-        <div class="count" id="found-count">0</div>
-        <p>Items you&apos;ve reported as found</p>
-      </div>
-      <div class="stat-card">
-        <h3>Claims</h3>
-        <div class="count" id="claim-count">0</div>
-        <p>Claims you&apos;ve submitted</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Your Reports</h2>
-      <div class="empty-state" id="reports-empty">
-        <p>You haven&apos;t reported any items yet.</p>
-        <div>
-          <a href="/pages/lost-report.html" class="btn">Report Lost Item</a>
-          <a href="/pages/found-report.html" class="btn">Report Found Item</a>
-        </div>
-      </div>
-      <div class="report-list" id="report-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Title</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody id="reports-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Your Claims</h2>
-      <div class="empty-state" id="claims-empty">
-        <p>You haven&apos;t claimed any items yet.</p>
-        <a href="/pages/found.html" class="btn">Browse Found Items</a>
-      </div>
-      <div class="claim-list" id="claim-list">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="claims-table-body"></tbody>
-        </table>
       </div>
     </div>
   </div>
@@ -481,6 +505,26 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       try {
+        // Define API base URL
+        const API_BASE_URL = 'http://localhost:8080/api';
+        
+        // Function to clear all notifications - local implementation
+        window.clearAllNotifications = function() {
+          // Clear any existing notification
+          const existingNotification = document.getElementById('notification');
+          if (existingNotification) {
+            existingNotification.classList.remove('show');
+            existingNotification.textContent = '';
+            existingNotification.className = '';
+          }
+          
+          // Also clear any timeouts
+          if (window._notificationTimeout) {
+            clearTimeout(window._notificationTimeout);
+            window._notificationTimeout = null;
+          }
+        };
+        
         // EXPLICITLY apply authentication UI state right away
         if (window.TalashNow && window.TalashNow.isAuthenticated) {
           console.log('Using TalashNow global auth state in dashboard');
@@ -525,6 +569,8 @@
         const tabPanes = document.querySelectorAll('.tab-pane');
         const lostItemsGrid = safeGet('lost-items-grid');
         const foundItemsGrid = safeGet('found-items-grid');
+        const claimsGrid = safeGet('claims-grid');
+        const receivedClaimsGrid = safeGet('received-claims-grid');
 
         // Fetch user stats
         try {
@@ -535,27 +581,119 @@
           let claimCount = 0;
           
           try {
-            const response = await fetch('http://localhost:8080/api/users/dashboard', {
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-            });
-
-            if (response.ok) {
-              const stats = await response.json();
-              console.log('User stats loaded successfully:', stats);
-              // Update values from API if available
-              username = stats.username || username;
-              lostCount = stats.lostCount !== undefined ? stats.lostCount : lostCount;
-              foundCount = stats.foundCount !== undefined ? stats.foundCount : foundCount;
-              claimCount = stats.claimCount !== undefined ? stats.claimCount : claimCount;
-            } else {
-              console.log('Failed to fetch user stats, using default values');
-              // Keep using default values - don't show error notification
+            // Get auth token and user data
+            const token = localStorage.getItem('token');
+            let userId = null;
+            
+            try {
+              const userDataStr = localStorage.getItem('userData');
+              if (userDataStr) {
+                const userData = JSON.parse(userDataStr);
+                if (userData) {
+                  // Handle MongoDB ObjectId format
+                  if (userData._id && typeof userData._id === 'object' && userData._id.$oid) {
+                    userId = userData._id.$oid;
+                    console.log('Dashboard stats - Found MongoDB ObjectId format:', userId);
+                    username = userData.name || userData.username || username;
+                  } else {
+                    userId = userData.id || userData._id || userData.userId;
+                    console.log('Dashboard stats - Found standard ID format:', userId);
+                    username = userData.name || userData.username || username;
+                  }
+                }
+              }
+            } catch (userError) {
+              console.error('Error getting user data:', userError);
+            }
+            
+            // Setup headers with auth
+            const headers = { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            };
+            
+            if (token) {
+              headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            // Try to get counts directly from the items endpoints
+            try {
+              // Get lost items count
+              const lostItemsUrl = `${API_BASE_URL}/lost-items?userId=${userId}`;
+              console.log('Fetching lost items for stats from:', lostItemsUrl);
+              
+              const lostResponse = await fetch(lostItemsUrl, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'include'
+              });
+              
+              if (lostResponse.ok) {
+                const allLostItems = await lostResponse.json();
+                
+                // Filter by user ID on client side
+                if (Array.isArray(allLostItems)) {
+                  const userLostItems = allLostItems.filter(item => 
+                    item.userId === userId || 
+                    item.user_id === userId || 
+                    (item.user && (item.user === userId || item.user.id === userId || item.user._id === userId))
+                  );
+                  lostCount = userLostItems.length;
+                  console.log('User lost items count:', lostCount);
+                }
+              }
+              
+              // Get found items count
+              const foundItemsUrl = `${API_BASE_URL}/found-items?userId=${userId}`;
+              console.log('Fetching found items for stats from:', foundItemsUrl);
+              
+              const foundResponse = await fetch(foundItemsUrl, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'include'
+              });
+              
+              if (foundResponse.ok) {
+                const allFoundItems = await foundResponse.json();
+                
+                // Filter by user ID on client side
+                if (Array.isArray(allFoundItems)) {
+                  const userFoundItems = allFoundItems.filter(item => 
+                    item.userId === userId || 
+                    item.user_id === userId || 
+                    (item.user && (item.user === userId || item.user.id === userId || item.user._id === userId))
+                  );
+                  foundCount = userFoundItems.length;
+                  console.log('User found items count:', foundCount);
+                }
+              }
+              
+              // Try to get claims count if available
+              try {
+                const claimsUrl = `${API_BASE_URL}/claims?userId=${userId}`;
+                console.log('Fetching claims for stats from:', claimsUrl);
+                
+                const claimsResponse = await fetch(claimsUrl, {
+                  method: 'GET',
+                  headers: headers,
+                  credentials: 'include'
+                });
+                
+                if (claimsResponse.ok) {
+                  const claims = await claimsResponse.json();
+                  if (Array.isArray(claims)) {
+                    claimCount = claims.length;
+                    console.log('User claims count:', claimCount);
+                  }
+                }
+              } catch (claimsError) {
+                console.error('Error fetching claims count:', claimsError);
+              }
+            } catch (countError) {
+              console.error('Error fetching item counts:', countError);
             }
           } catch (fetchError) {
             console.error('Error during user stats fetch:', fetchError);
-            // Keep using default values - don't show error notification
           }
           
           // Set the values in the UI
@@ -575,10 +713,12 @@
               welcomeMsg.className = 'welcome-message';
               
               // Add some styling to the welcome message
-              welcomeMsg.style.fontSize = '1.2rem';
-              welcomeMsg.style.color = '#007bff';
+              welcomeMsg.style.fontSize = '1.8rem';
+              welcomeMsg.style.color = '#FFFFFFee';
               welcomeMsg.style.fontWeight = '500';
               welcomeMsg.style.marginTop = '8px';
+              welcomeMsg.style.marginLeft = '1.4rem';
+              welcomeMsg.style.paddingTop = '1.2rem';
               
               // Add after the existing subtext
               const subtext = dashboardHeader.querySelector('.subtext');
@@ -605,7 +745,7 @@
           // Use a try-catch block just for the fetch operation
           let reports = [];
           try {
-            const response = await fetch('http://localhost:8080/api/user-reports', {
+            const response = await fetch(`${API_BASE_URL}/user-reports`, {
               method: 'GET',
               headers: { 'Content-Type': 'application/json' },
               credentials: 'include',
@@ -660,7 +800,7 @@
           // Try to get claims from API
           let claims = [];
           try {
-            const response = await fetch('http://localhost:8080/api/user-claims', {
+            const response = await fetch(`${API_BASE_URL}/user-claims`, {
               method: 'GET',
               headers: { 'Content-Type': 'application/json' },
               credentials: 'include',
@@ -743,113 +883,761 @@
           });
         });
 
-        // Load user's items
+        // Load user's claims
         try {
-          let itemsResponse = [];
+          // Get user ID and token
+          const token = localStorage.getItem('token');
+          let userId = null;
           
           try {
-            // Try to get items from the API
-            itemsResponse = await itemsAPI.getUserItems();
-            console.log('Items API response:', itemsResponse);
+            const userDataStr = localStorage.getItem('userData');
+            if (userDataStr) {
+              const userData = JSON.parse(userDataStr);
+              if (userData) {
+                // Handle MongoDB ObjectId format
+                if (userData._id && typeof userData._id === 'object' && userData._id.$oid) {
+                  userId = userData._id.$oid;
+                } else {
+                  userId = userData.id || userData._id || userData.userId;
+                }
+              }
+            }
+          } catch (userError) {
+            console.error('Error getting user ID for claims:', userError);
+          }
+          
+          // Setup headers with auth
+          const headers = { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          };
+          
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+          }
+          
+          // Fetch claims made by the user
+          let userClaims = [];
+          try {
+            // Try using the API singleton first
+            try {
+              const claimsResult = await itemsAPI.getUserClaims();
+              if (claimsResult.success && Array.isArray(claimsResult.data)) {
+                userClaims = claimsResult.data;
+              }
+            } catch (apiError) {
+              console.error('Error using API singleton for claims:', apiError);
+              
+              // Fall back to direct fetch
+              const claimsUrl = `${API_BASE_URL}/claims/user/${userId}`;
+              console.log('Fetching user claims from:', claimsUrl);
+              
+              const claimsResponse = await fetch(claimsUrl, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'include'
+              });
+              
+              if (claimsResponse.ok) {
+                try {
+                  const claimsData = await claimsResponse.json();
+                  if (Array.isArray(claimsData)) {
+                    userClaims = claimsData;
+                  }
+                } catch (parseError) {
+                  console.error('Error parsing claims response:', parseError);
+                }
+              }
+            }
+            
+            // Render user claims
+            if (claimsGrid) {
+              if (userClaims.length > 0) {
+                claimsGrid.innerHTML = userClaims.map(claim => `
+                  <div class="item-card">
+                    <div class="item-details">
+                      <h3>${claim.itemName || claim.item?.itemName || 'Claimed Item'}</h3>
+                      <p class="status"><i class="fas fa-info-circle"></i> Status: <span class="status-badge ${claim.status?.toLowerCase() || 'pending'}">${claim.status || 'Pending'}</span></p>
+                      <p class="date"><i class="fas fa-calendar"></i> Claimed on: ${claim.claimDate ? new Date(claim.claimDate).toLocaleDateString() : 'Unknown date'}</p>
+                      <p class="description"><i class="fas fa-align-left"></i> ${claim.description || 'No description provided'}</p>
+                      <div class="item-actions">
+                        <a href="item-detail.html?id=${claim.itemId || claim.item?._id || claim.item?.id}&type=FOUND&from=dashboard.html" class="view-details">View Item</a>
+                      </div>
+                    </div>
+                  </div>
+                `).join('');
+                
+                // Update claim count
+                if (claimCountEl) {
+                  claimCountEl.textContent = userClaims.length;
+                }
+              } else {
+                claimsGrid.innerHTML = `
+                  <div class="empty-state" style="max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;">
+                    <p style="max-width: 100%; word-wrap: break-word;">You haven't made any claims yet.</p>
+                    <p style="max-width: 100%; word-wrap: break-word;">Browse the found items to claim something you've lost.</p>
+                    <a href="found.html" class="btn" style="max-width: 100%; white-space: normal; display: inline-block; font-size: 1rem; padding: 8px 12px;">Browse Found Items</a>
+                  </div>
+                `;
+              }
+            }
+            
+            // Fetch claims received for the user's found items
+            let receivedClaims = [];
+            try {
+              // Try direct fetch for received claims
+              const receivedClaimsUrl = `${API_BASE_URL}/claims/received/${userId}`;
+              console.log('Fetching received claims from:', receivedClaimsUrl);
+              
+              const receivedClaimsResponse = await fetch(receivedClaimsUrl, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'include'
+              });
+              
+              if (receivedClaimsResponse.ok) {
+                try {
+                  const receivedClaimsData = await receivedClaimsResponse.json();
+                  if (Array.isArray(receivedClaimsData)) {
+                    receivedClaims = receivedClaimsData;
+                  }
+                } catch (parseError) {
+                  console.error('Error parsing received claims response:', parseError);
+                }
+              }
+              
+              // If the specific endpoint fails, try to get all claims for the user's found items
+              if (receivedClaims.length === 0) {
+                // Get the user's found items first
+                const foundItemsUrl = `${API_BASE_URL}/found-items?userId=${userId}`;
+                const foundResponse = await fetch(foundItemsUrl, {
+                  method: 'GET',
+                  headers: headers,
+                  credentials: 'include'
+                });
+                
+                if (foundResponse.ok) {
+                  const foundItems = await foundResponse.json();
+                  
+                  // For each found item, get its claims
+                  if (Array.isArray(foundItems)) {
+                    for (const item of foundItems) {
+                      const itemId = item.id || item._id;
+                      if (itemId) {
+                        const itemClaimsUrl = `${API_BASE_URL}/claims/item/${itemId}`;
+                        try {
+                          const itemClaimsResponse = await fetch(itemClaimsUrl, {
+                            method: 'GET',
+                            headers: headers,
+                            credentials: 'include'
+                          });
+                          
+                          if (itemClaimsResponse.ok) {
+                            const itemClaims = await itemClaimsResponse.json();
+                            if (Array.isArray(itemClaims)) {
+                              // Add item information to each claim
+                              itemClaims.forEach(claim => {
+                                claim.item = item;
+                              });
+                              receivedClaims = [...receivedClaims, ...itemClaims];
+                            }
+                          }
+                        } catch (claimError) {
+                          console.error(`Error fetching claims for item ${itemId}:`, claimError);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              
+              // Render received claims
+              if (receivedClaimsGrid) {
+                if (receivedClaims.length > 0) {
+                  receivedClaimsGrid.innerHTML = receivedClaims.map(claim => `
+                    <div class="item-card">
+                      <div class="item-details">
+                        <h3>${claim.item?.itemName || 'Claimed Item'}</h3>
+                        <p class="claimant"><i class="fas fa-user"></i> Claimed by: ${claim.claimantName || claim.name || 'Anonymous'}</p>
+                        <p class="contact"><i class="fas fa-envelope"></i> Contact: ${claim.claimantEmail || claim.email || 'Not provided'}</p>
+                        <p class="phone"><i class="fas fa-phone"></i> Phone: ${claim.claimantPhone || claim.contactNumber || 'Not provided'}</p>
+                        <p class="description"><i class="fas fa-align-left"></i> ${claim.description || 'No description provided'}</p>
+                        <p class="status"><i class="fas fa-info-circle"></i> Status: <span class="status-badge ${claim.status?.toLowerCase() || 'pending'}">${claim.status || 'Pending'}</span></p>
+                        <div class="item-actions">
+                          <a href="item-detail.html?id=${claim.itemId || claim.item?._id || claim.item?.id}&type=FOUND&from=dashboard.html" class="view-details">View Item</a>
+                          <div class="claim-actions">
+                            <button class="btn btn-approve" data-claim-id="${claim.id || claim._id}" data-status="APPROVED" ${claim.status === 'APPROVED' ? 'disabled' : ''}>
+                              ${claim.status === 'APPROVED' ? 'Approved' : 'Approve'}
+                            </button>
+                            <button class="btn btn-reject" data-claim-id="${claim.id || claim._id}" data-status="REJECTED" ${claim.status === 'REJECTED' ? 'disabled' : ''}>
+                              ${claim.status === 'REJECTED' ? 'Rejected' : 'Reject'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  `).join('');
+                  
+                  // Add event listeners for approve/reject buttons
+                  document.querySelectorAll('.btn-approve, .btn-reject').forEach(btn => {
+                    if (!btn.disabled) {
+                      btn.addEventListener('click', async (e) => {
+                        const claimId = e.target.dataset.claimId;
+                        const status = e.target.dataset.status;
+                        
+                        if (!claimId || !status) return;
+                        
+                        try {
+                          e.target.disabled = true;
+                          e.target.textContent = status === 'APPROVED' ? 'Approving...' : 'Rejecting...';
+                          
+                          // Try using API singleton first
+                          let result;
+                          try {
+                            result = await itemsAPI.updateClaimStatus(claimId, status);
+                          } catch (apiError) {
+                            console.error('Error using API singleton for claim status update:', apiError);
+                            
+                            // Fall back to direct fetch
+                            const updateUrl = `${API_BASE_URL}/claims/${claimId}/status`;
+                            const updateResponse = await fetch(updateUrl, {
+                              method: 'PUT',
+                              headers: headers,
+                              credentials: 'include',
+                              body: JSON.stringify({ status })
+                            });
+                            
+                            result = { 
+                              success: updateResponse.ok, 
+                              message: updateResponse.ok ? 'Status updated' : 'Failed to update status'
+                            };
+                          }
+                          
+                          if (result.success) {
+                            e.target.textContent = status === 'APPROVED' ? 'Approved' : 'Rejected';
+                            showNotification(`Claim ${status.toLowerCase()} successfully`, 'success');
+                            
+                            // Disable the other button
+                            const otherBtn = e.target.closest('.claim-actions').querySelector(
+                              `.btn-${status === 'APPROVED' ? 'reject' : 'approve'}`
+                            );
+                            if (otherBtn) otherBtn.disabled = true;
+                          } else {
+                            e.target.disabled = false;
+                            e.target.textContent = status === 'APPROVED' ? 'Approve' : 'Reject';
+                            showNotification(`Failed to update claim status: ${result.message}`, 'error');
+                          }
+                        } catch (error) {
+                          console.error('Error updating claim status:', error);
+                          e.target.disabled = false;
+                          e.target.textContent = status === 'APPROVED' ? 'Approve' : 'Reject';
+                          showNotification(`Error: ${error.message || 'An unknown error occurred'}`, 'error');
+                        }
+                      });
+                    }
+                  });
+                } else {
+                  receivedClaimsGrid.innerHTML = `
+                    <div class="empty-state" style="max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;">
+                      <p style="max-width: 100%; word-wrap: break-word;">You haven't received any claims for your found items yet.</p>
+                      <p style="max-width: 100%; word-wrap: break-word;">When someone claims an item you've found, it will appear here.</p>
+                    </div>
+                  `;
+                }
+              }
+            } catch (receivedClaimsError) {
+              console.error('Error fetching received claims:', receivedClaimsError);
+              
+              if (receivedClaimsGrid) {
+                receivedClaimsGrid.innerHTML = `
+                  <div class="empty-state" style="max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;">
+                    <p style="max-width: 100%; word-wrap: break-word;">Error loading received claims.</p>
+                    <p style="max-width: 100%; word-wrap: break-word;">Please try again later.</p>
+                  </div>
+                `;
+              }
+            }
+          } catch (claimsError) {
+            console.error('Error loading claims:', claimsError);
+            
+            if (claimsGrid) {
+              claimsGrid.innerHTML = `
+                <div class="empty-state" style="max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;">
+                  <p style="max-width: 100%; word-wrap: break-word;">Error loading your claims.</p>
+                  <p style="max-width: 100%; word-wrap: break-word;">Please try again later.</p>
+                </div>
+              `;
+            }
+          }
+        } catch (error) {
+          console.error('Overall claims error:', error);
+        }
+        
+        // Load user's items
+        try {
+          let userItems = null;
+          
+          try {
+            // Try to get items from the API - using updated API method with user association
+            const token = localStorage.getItem('token');
+            
+            // Get user ID for logging
+            let userId = null;
+            try {
+              const userDataStr = localStorage.getItem('userData');
+              console.log('Dashboard items - Raw userData:', userDataStr);
+              
+              if (userDataStr) {
+                const userData = JSON.parse(userDataStr);
+                console.log('Dashboard items - Parsed userData:', userData);
+                
+                if (userData) {
+                  // Handle MongoDB ObjectId format
+                  if (userData._id && typeof userData._id === 'object' && userData._id.$oid) {
+                    userId = userData._id.$oid;
+                    console.log('Dashboard items - Found MongoDB ObjectId format:', userId);
+                  } else {
+                    userId = userData.id || userData._id || userData.userId;
+                    console.log('Dashboard items - Found standard ID format:', userId);
+                  }
+                }
+              }
+            } catch (userError) {
+              console.error('Error getting user ID:', userError);
+            }
+            
+            // DIRECT API CALLS INSTEAD OF USING THE SINGLETON
+            try {
+              console.log('Making direct API calls to fetch user items');
+              
+              // Setup headers
+              const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              };
+              
+              if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+              }
+              
+              // Try to get lost items directly - use the main endpoint with filtering
+              const lostItemsUrl = `${API_BASE_URL}/lost-items?userId=${userId}`;
+              console.log('Fetching lost items from:', lostItemsUrl);
+              
+              const lostResponse = await fetch(lostItemsUrl, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'include'
+              });
+              
+              console.log('Lost items response status:', lostResponse.status);
+              
+              let lostItems = [];
+              if (lostResponse.ok) {
+                try {
+                  const allLostItems = await lostResponse.json();
+                  console.log('All lost items fetched:', allLostItems);
+                  
+                  // Filter items by user ID on the client side as a backup
+                  if (Array.isArray(allLostItems)) {
+                    lostItems = allLostItems.filter(item => 
+                      item.userId === userId || 
+                      item.user_id === userId || 
+                      (item.user && (item.user === userId || item.user.id === userId || item.user._id === userId))
+                    );
+                    console.log('Filtered lost items by user ID:', lostItems);
+                  }
+                } catch (parseError) {
+                  console.error('Error parsing lost items response:', parseError);
+                }
+              } else {
+                console.error('Failed to fetch lost items:', lostResponse.statusText);
+              }
+              
+              // Try to get found items directly - use the main endpoint with filtering
+              const foundItemsUrl = `${API_BASE_URL}/found-items?userId=${userId}`;
+              console.log('Fetching found items from:', foundItemsUrl);
+              
+              const foundResponse = await fetch(foundItemsUrl, {
+                method: 'GET',
+                headers: headers,
+                credentials: 'include'
+              });
+              
+              console.log('Found items response status:', foundResponse.status);
+              
+              let foundItems = [];
+              if (foundResponse.ok) {
+                try {
+                  const allFoundItems = await foundResponse.json();
+                  console.log('All found items fetched:', allFoundItems);
+                  
+                  // Filter items by user ID on the client side as a backup
+                  if (Array.isArray(allFoundItems)) {
+                    foundItems = allFoundItems.filter(item => 
+                      item.userId === userId || 
+                      item.user_id === userId || 
+                      (item.user && (item.user === userId || item.user.id === userId || item.user._id === userId))
+                    );
+                    console.log('Filtered found items by user ID:', foundItems);
+                  }
+                } catch (parseError) {
+                  console.error('Error parsing found items response:', parseError);
+                }
+              } else {
+                console.error('Failed to fetch found items:', foundResponse.statusText);
+              }
+              
+              // If we got items, use them directly
+              if (Array.isArray(lostItems) || Array.isArray(foundItems)) {
+                userItems = {
+                  lost: Array.isArray(lostItems) ? lostItems : [],
+                  found: Array.isArray(foundItems) ? foundItems : []
+                };
+              } else {
+                // Fallback to the API singleton
+                console.log('Falling back to API singleton');
+                userItems = await itemsAPI.getUserItems();
+              }
+            } catch (directApiError) {
+              console.error('Error making direct API calls:', directApiError);
+              // Fallback to the API singleton
+              console.log('Falling back to API singleton after error');
+              userItems = await itemsAPI.getUserItems();
+            }
           } catch (apiError) {
             console.error('Error calling itemsAPI.getUserItems:', apiError);
             // Continue with empty itemsResponse instead of showing error
+            userItems = { lost: [], found: [] };
           }
           
-          // Ensure items is an array, handle API response format
-          let items = [];
+          // Default to empty arrays if we didn't get valid data
+          const lostItems = Array.isArray(userItems?.lost) ? userItems.lost : [];
+          const foundItems = Array.isArray(userItems?.found) ? userItems.found : [];
           
-          if (itemsResponse && Array.isArray(itemsResponse)) {
-            // If API returns a direct array
-            items = itemsResponse;
-          } else if (itemsResponse && (itemsResponse.lost || itemsResponse.found)) {
-            // If API returns an object with lost and found arrays
-            items = [...(Array.isArray(itemsResponse.lost) ? itemsResponse.lost : []), 
-                    ...(Array.isArray(itemsResponse.found) ? itemsResponse.found : [])];
-          } else if (itemsResponse && typeof itemsResponse === 'object') {
-            // Try to convert object to array if possible
-            items = Object.values(itemsResponse).filter(item => item && typeof item === 'object');
+          console.log('Final processed user items:', { lostItems, foundItems });
+          
+          // Filter out any items that the user has chosen to hide locally
+          try {
+            const hiddenItems = JSON.parse(localStorage.getItem('hiddenItems') || '{}');
+            
+            if (Object.keys(hiddenItems).length > 0) {
+              console.log('Filtering out hidden items:', hiddenItems);
+              
+              // Add a reset button to the dashboard header if there are hidden items
+              const dashboardHeader = document.querySelector('.dashboard-header');
+              if (dashboardHeader && !document.getElementById('reset-hidden-items')) {
+                const resetButton = document.createElement('button');
+                resetButton.id = 'reset-hidden-items';
+                resetButton.className = 'btn';
+                resetButton.style.backgroundColor = '#607d8b';
+                resetButton.style.color = 'white';
+                resetButton.style.border = 'none';
+                resetButton.style.padding = '8px 15px';
+                resetButton.style.borderRadius = '4px';
+                resetButton.style.cursor = 'pointer';
+                resetButton.style.marginLeft = '10px';
+                resetButton.style.fontSize = '0.9rem';
+                resetButton.textContent = 'Show Hidden Items';
+                
+                resetButton.addEventListener('click', () => {
+                  const confirmReset = confirm('This will show all items you previously hid. Continue?');
+                  if (confirmReset) {
+                    localStorage.removeItem('hiddenItems');
+                    showNotification('Hidden items restored. Refreshing page...', 'info');
+                    setTimeout(() => window.location.reload(), 1500);
+                  }
+                });
+                
+                // Find a good place to add the button
+                const actionsDiv = dashboardHeader.querySelector('.actions');
+                if (actionsDiv) {
+                  actionsDiv.appendChild(resetButton);
+                } else {
+                  dashboardHeader.appendChild(resetButton);
+                }
+              }
+              
+              // Safe filter function to handle potential errors with item IDs
+              const safeFilter = (items, type) => {
+                return items.filter(item => {
+                  try {
+                    const itemId = item?.id || item?._id;
+                    if (!itemId) return true; // Keep items without ID
+                    return !hiddenItems[`${type}_${itemId}`];
+                  } catch (e) {
+                    console.error('Error filtering item:', e, item);
+                    return true; // Keep items that cause errors
+                  }
+                });
+              };
+              
+              lostItems = safeFilter(lostItems, 'LOST');
+              foundItems = safeFilter(foundItems, 'FOUND');
+              
+              console.log('After filtering hidden items:', { lostItems, foundItems });
+            }
+          } catch (hiddenItemsError) {
+            console.error('Error filtering hidden items:', hiddenItemsError);
+            // Try to recover by clearing potentially corrupted data
+            try {
+              localStorage.removeItem('hiddenItems');
+              console.log('Cleared potentially corrupted hiddenItems data');
+            } catch (clearError) {
+              console.error('Failed to clear hiddenItems:', clearError);
+            }
           }
           
-          console.log('Processed items data:', items);
-          
-          // Now safely filter, ensuring items is an array
-          const lostItems = Array.isArray(items) ? 
-            items.filter(item => item && item.type === 'LOST') : [];
-          const foundItems = Array.isArray(items) ? 
-            items.filter(item => item && item.type === 'FOUND') : [];
+          // Update the item counts in the stats section with accurate numbers
+          if (lostCountEl) lostCountEl.textContent = lostItems.length;
+          if (foundCountEl) foundCountEl.textContent = foundItems.length;
           
           // Render lost items, safely check if lostItemsGrid exists
           if (lostItemsGrid) {
             lostItemsGrid.innerHTML = lostItems.length > 0 ? 
               lostItems.map(item => `
                 <div class="item-card">
-                  <img src="${item.imageUrl || '../images/placeholder.jpg'}" alt="${item.title || 'Lost item'}">
+                  <img src="${item.photoBase64 || item.imageUrl || item.image || '../images/placeholder.jpg'}" 
+                       alt="${item.itemName || item.name || 'Lost item'}"
+                       onerror="this.onerror=null; this.src='../images/placeholder.jpg';">
                   <div class="item-details">
-                    <h3>${item.title || 'Untitled item'}</h3>
+                    <h3>${item.itemName || item.name || 'Untitled item'}</h3>
                     <p class="category">${item.category || 'Uncategorized'}</p>
                     <p class="location"><i class="fas fa-map-marker-alt"></i> ${item.location || 'Unknown location'}</p>
-                    <p class="date"><i class="fas fa-calendar"></i> ${item.date ? new Date(item.date).toLocaleDateString() : 'Unknown date'}</p>
+                    <p class="date"><i class="fas fa-calendar"></i> ${item.dateLost ? new Date(item.dateLost).toLocaleDateString() : 'Unknown date'}</p>
                     <div class="item-actions">
-                      <a href="item-detail.html?id=${item.id}" class="view-details">View Details</a>
-                      <button class="resolve-btn" data-id="${item.id}" ${item.isResolved ? 'disabled' : ''}>
+                      <a href="item-detail.html?id=${item.id || item._id}&type=LOST&from=dashboard.html" class="view-details">View Details</a>
+                      <button class="resolve-btn" data-id="${item.id || item._id}" data-type="LOST" ${item.isResolved ? 'disabled' : ''}>
                         ${item.isResolved ? 'Resolved' : 'Mark as Resolved'}
                       </button>
                     </div>
                   </div>
                 </div>
-              `).join('') : '<p class="no-items">No lost items reported yet.</p>';
+              `).join('') : 
+              `<div class="empty-state" style="max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;">
+                <p style="max-width: 100%; word-wrap: break-word;">You haven't reported any lost items yet.</p>
+                <a href="lost-report.html" class="btn" style="max-width: 100%; white-space: normal; display: inline-block; font-size: 1rem; padding: 8px 12px;">Report Lost</a>
+              </div>`;
           }
-
+          
           // Render found items, safely check if foundItemsGrid exists
           if (foundItemsGrid) {
             foundItemsGrid.innerHTML = foundItems.length > 0 ? 
               foundItems.map(item => `
                 <div class="item-card">
-                  <img src="${item.imageUrl || '../images/placeholder.jpg'}" alt="${item.title || 'Found item'}">
+                  <img src="${item.photoBase64 || item.imageUrl || item.image || '../images/placeholder.jpg'}" 
+                       alt="${item.itemName || item.name || 'Found item'}"
+                       onerror="this.onerror=null; this.src='../images/placeholder.jpg';">
                   <div class="item-details">
-                    <h3>${item.title || 'Untitled item'}</h3>
+                    <h3>${item.itemName || item.name || 'Untitled item'}</h3>
                     <p class="category">${item.category || 'Uncategorized'}</p>
                     <p class="location"><i class="fas fa-map-marker-alt"></i> ${item.location || 'Unknown location'}</p>
-                    <p class="date"><i class="fas fa-calendar"></i> ${item.date ? new Date(item.date).toLocaleDateString() : 'Unknown date'}</p>
+                    <p class="date"><i class="fas fa-calendar"></i> ${item.dateFound ? new Date(item.dateFound).toLocaleDateString() : 'Unknown date'}</p>
                     <div class="item-actions">
-                      <a href="item-detail.html?id=${item.id}" class="view-details">View Details</a>
-                      <button class="resolve-btn" data-id="${item.id}" ${item.isResolved ? 'disabled' : ''}>
+                      <a href="item-detail.html?id=${item.id || item._id}&type=FOUND&from=dashboard.html" class="view-details">View Details</a>
+                      <button class="resolve-btn" data-id="${item.id || item._id}" data-type="FOUND" ${item.isResolved ? 'disabled' : ''}>
                         ${item.isResolved ? 'Resolved' : 'Mark as Resolved'}
                       </button>
                     </div>
                   </div>
                 </div>
-              `).join('') : '<p class="no-items">No found items reported yet.</p>';
+              `).join('') : 
+              `<div class="empty-state" style="max-width: 100%; box-sizing: border-box; overflow-wrap: break-word;">
+                <p style="max-width: 100%; word-wrap: break-word;">You haven't reported any found items yet.</p>
+                <a href="found-report.html" class="btn" style="max-width: 100%; white-space: normal; display: inline-block; font-size: 1rem; padding: 8px 12px;">Report Found</a>
+              </div>`;
           }
-
-          // Add event listeners for resolve buttons if any exist
-          const resolveButtons = document.querySelectorAll('.resolve-btn');
-          if (resolveButtons.length > 0) {
-            resolveButtons.forEach(btn => {
+          
+          // Add event listeners to resolve buttons
+          document.querySelectorAll('.resolve-btn').forEach(btn => {
+            if (!btn.disabled) {
               btn.addEventListener('click', async (e) => {
-                const itemId = e.target.getAttribute('data-id');
-                try {
-                  await itemsAPI.resolveItem(itemId);
-                  e.target.textContent = 'Resolved';
-                  e.target.disabled = true;
-                  showNotification('Item marked as resolved!', 'success');
-                } catch (error) {
-                  console.error('Error resolving item:', error);
-                  // Still show notification for this action since it's user-initiated
-                  showNotification(`Unable to mark item as resolved. Please try again.`, 'error');
+                const itemId = e.target.dataset.id;
+                const type = e.target.dataset.type || (e.target.closest('.tab-pane').id === 'lost-items' ? 'LOST' : 'FOUND');
+                
+                if (!itemId) return;
+                
+                // Get API singleton
+                const itemsAPI = ApiSingleton.getInstance().items;
+                
+                // Ask user if they want to delete or mark as resolved
+                const action = confirm(`Do you want to delete this ${type.toLowerCase()} item?\n\nClick 'OK' to delete the item.\nClick 'Cancel' to mark it as resolved instead.`);
+                
+                if (action) {
+                  // USER CHOSE TO DELETE
+                  try {
+                    e.target.disabled = true;
+                    e.target.textContent = 'Deleting...';
+                    
+                    // Try server deletion
+                    const deleteResult = await itemsAPI.deleteItem(itemId, type);
+                    
+                    if (deleteResult.success) {
+                      // Success! Remove the item from UI
+                      const itemCard = e.target.closest('.item-card');
+                      if (itemCard) {
+                        itemCard.style.transition = 'opacity 0.3s ease';
+                        itemCard.style.opacity = '0';
+                        setTimeout(() => {
+                          itemCard.remove();
+                          
+                          // Update the counter in the stats section
+                          const countElement = type.toUpperCase() === 'LOST' ? 
+                            document.getElementById('lost-count') : 
+                            document.getElementById('found-count');
+                            
+                          if (countElement) {
+                            const currentCount = parseInt(countElement.textContent);
+                            if (!isNaN(currentCount) && currentCount > 0) {
+                              countElement.textContent = (currentCount - 1).toString();
+                            }
+                          }
+                        }, 300);
+                      }
+                      
+                      showNotification('Item successfully deleted', 'success');
+                    } else {
+                      // Server deletion failed, offer local removal
+                      // Remove all error notifications first
+                      clearAllNotifications();
+                      
+                      e.target.disabled = false;
+                      e.target.textContent = 'Remove Locally';
+                      
+                      // Add the warning band to indicate local-only action
+                      const itemCard = e.target.closest('.item-card');
+                      if (itemCard && !itemCard.querySelector('.local-only-warning')) {
+                        const warningBand = document.createElement('div');
+                        warningBand.className = 'local-only-warning';
+                        warningBand.textContent = 'Cannot delete from server';
+                        warningBand.style.backgroundColor = '#ff9800';
+                        warningBand.style.color = 'white';
+                        warningBand.style.padding = '5px';
+                        warningBand.style.textAlign = 'center';
+                        warningBand.style.fontSize = '12px';
+                        itemCard.prepend(warningBand);
+                      }
+                      
+                      showNotification('Server deletion failed. Click "Remove Locally" to hide from your view.', 'warning', 8000);
+                      
+                      // Change button to do local removal instead
+                      e.target.removeEventListener('click', arguments.callee);
+                      e.target.onclick = (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        // Store the hidden item IDs in localStorage
+                        try {
+                          const hiddenItems = JSON.parse(localStorage.getItem('hiddenItems') || '{}');
+                          hiddenItems[`${type}_${itemId}`] = true;
+                          localStorage.setItem('hiddenItems', JSON.stringify(hiddenItems));
+                          
+                          // Remove from UI
+                          const itemCard = event.target.closest('.item-card');
+                          if (itemCard) {
+                            itemCard.style.transition = 'opacity 0.3s ease';
+                            itemCard.style.opacity = '0';
+                            setTimeout(() => {
+                              itemCard.remove();
+                              
+                              // Update counter
+                              const countElement = type.toUpperCase() === 'LOST' ? 
+                                document.getElementById('lost-count') : 
+                                document.getElementById('found-count');
+                                
+                              if (countElement) {
+                                const currentCount = parseInt(countElement.textContent);
+                                if (!isNaN(currentCount) && currentCount > 0) {
+                                  countElement.textContent = (currentCount - 1).toString();
+                                }
+                              }
+                            }, 300);
+                          }
+                          
+                          showNotification('Item hidden from your view', 'success');
+                        } catch (localError) {
+                          console.error('Error in local removal:', localError);
+                          showNotification('Failed to hide item locally', 'error');
+                        }
+                        
+                        return false; // Prevent default and bubbling
+                      };
+                      
+                      // Return early to prevent more error handling
+                      return;
+                    }
+                  } catch (deleteError) {
+                    clearAllNotifications(); // Clear existing notifications
+                    console.error('Error deleting item:', deleteError);
+                    e.target.disabled = false;
+                    e.target.textContent = 'Mark as Resolved';
+                    showNotification(`Error deleting item: ${deleteError.message}`, 'error');
+                  }
+                } else {
+                  // USER CHOSE TO MARK AS RESOLVED
+                  e.target.textContent = 'Resolving...';
+                  
+                  try {
+                    const result = await itemsAPI.resolveItem(itemId, type);
+                    
+                    if (result.success) {
+                      // Success! Mark as resolved in the UI
+                      e.target.textContent = 'Resolved';
+                      e.target.disabled = true;
+                      showNotification('Item marked as resolved', 'success');
+                    } else {
+                      // If resolution fails, convert to a local removal button
+                      e.target.disabled = false;
+                      e.target.textContent = 'Remove Locally';
+                      e.target.className = 'resolve-btn local-remove'; // Add class for styling
+                      
+                      // Add the warning band
+                      const itemCard = e.target.closest('.item-card');
+                      if (itemCard && !itemCard.querySelector('.local-only-warning')) {
+                        const warningBand = document.createElement('div');
+                        warningBand.className = 'local-only-warning';
+                        warningBand.textContent = 'Cannot be resolved on server';
+                        warningBand.style.backgroundColor = '#ff9800';
+                        warningBand.style.color = 'white';
+                        warningBand.style.padding = '5px';
+                        warningBand.style.textAlign = 'center';
+                        warningBand.style.fontSize = '13px';
+                        warningBand.style.fontWeight = 'bold';
+                        itemCard.prepend(warningBand);
+                      }
+                      
+                      showNotification('Could not mark as resolved on server. Click "Remove Locally" to hide from your view.', 'warning', 8000);
+                      
+                      // Change button to do local removal
+                      e.target.onclick = (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        
+                        // Perform local removal
+                        storeHiddenItem(itemId, type);
+                        removeItemFromUI(e.target, type);
+                        showNotification('Item hidden from your view', 'success');
+                      };
+                    }
+                  } catch (error) {
+                    console.error('Error during resolve:', error);
+                    
+                    // Reset button state
+                    e.target.disabled = false;
+                    e.target.textContent = 'Mark as Resolved';
+                    showNotification(`Error: ${error.message}`, 'error');
+                  }
                 }
               });
-            });
-          }
+            }
+          });
         } catch (error) {
-          console.error('Overall error in items section:', error);
-          // Don't show error notification, just show empty state
-          if (lostItemsGrid) {
-            lostItemsGrid.innerHTML = '<p class="no-items">No lost items reported yet.</p>';
-          }
-          if (foundItemsGrid) {
-            foundItemsGrid.innerHTML = '<p class="no-items">No found items reported yet.</p>';
+          console.error('Error loading user items:', error);
+          // Show notification but don't let it crash the page
+          try {
+            showNotification(`Error loading items: ${error.message}`, 'error');
+          } catch (notifError) {
+            console.error('Failed to show notification:', notifError);
           }
         }
       } catch (error) {
@@ -872,6 +1660,43 @@
         document.querySelector('.dashboard-container').style.display = 'block';
       }
     });
+
+    // Helper function to store hidden item in localStorage
+    function storeHiddenItem(itemId, type) {
+      try {
+        const hiddenItems = JSON.parse(localStorage.getItem('hiddenItems') || '{}');
+        hiddenItems[`${type}_${itemId}`] = true;
+        localStorage.setItem('hiddenItems', JSON.stringify(hiddenItems));
+        return true;
+      } catch (error) {
+        console.error('Error storing hidden item:', error);
+        return false;
+      }
+    }
+    
+    // Helper function to remove item from UI
+    function removeItemFromUI(buttonElement, type) {
+      const itemCard = buttonElement.closest('.item-card');
+      if (itemCard) {
+        itemCard.style.transition = 'opacity 0.3s ease';
+        itemCard.style.opacity = '0';
+        setTimeout(() => {
+          itemCard.remove();
+          
+          // Update the counter in the stats section
+          const countElement = type.toUpperCase() === 'LOST' ? 
+            document.getElementById('lost-count') : 
+            document.getElementById('found-count');
+            
+          if (countElement) {
+            const currentCount = parseInt(countElement.textContent);
+            if (!isNaN(currentCount) && currentCount > 0) {
+              countElement.textContent = (currentCount - 1).toString();
+            }
+          }
+        }, 300);
+      }
+    }
   </script>
 </body>
 </html>

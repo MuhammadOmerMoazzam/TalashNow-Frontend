@@ -22,6 +22,7 @@
   <!-- style -->
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="stylesheet" href="../css/claim.css" />
   <title>Lost Item Report | TalashNow</title>
 </head>
 
@@ -88,6 +89,16 @@
               <option value="clothing">Clothing</option>
               <option value="bags">Bags & Wallets</option>
               <option value="keys">Keys</option>
+              <option value="human">Human/Person</option>
+              <option value="pets">Pets</option>
+              <option value="books">Books & Stationery</option>
+              <option value="toys">Toys & Games</option>
+              <option value="instruments">Musical Instruments</option>
+              <option value="sports">Sports Equipment</option>
+              <option value="luggage">Luggage & Travel</option>
+              <option value="medical">Medical Equipment</option>
+              <option value="eyewear">Eyewear</option>
+              <option value="accessories">Accessories</option>
               <option value="other">Other</option>
             </select>
           </div>
@@ -130,7 +141,7 @@
 
         <div class="form-group checkbox">
           <input type="checkbox" id="agree-terms" name="agree-terms" required>
-          <label for="agree-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
+          <label for="agree-terms">I agree to the <a href="#" id="terms-link">Terms of Service</a> and <a href="#" id="privacy-link">Privacy
               Policy</a>*</label>
         </div>
 
@@ -197,6 +208,54 @@
   <script src="../js/api.js"></script>
   <script src="../js/scripts.js"></script>
   <script>
+    // Handle Terms of Service and Privacy Policy modals
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get modal elements
+      const termsModal = document.getElementById('terms-modal');
+      const privacyModal = document.getElementById('privacy-modal');
+      
+      // Get open/close elements
+      const termsLink = document.getElementById('terms-link');
+      const privacyLink = document.getElementById('privacy-link');
+      const closeBtns = document.querySelectorAll('.close-modal');
+      
+      // Add event listeners to open modals
+      if (termsLink) {
+        termsLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          termsModal.style.display = 'block';
+        });
+      }
+      
+      if (privacyLink) {
+        privacyLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          privacyModal.style.display = 'block';
+        });
+      }
+      
+      // Add event listeners to close modals
+      if (closeBtns) {
+        closeBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            termsModal.style.display = 'none';
+            privacyModal.style.display = 'none';
+          });
+        });
+      }
+      
+      // Close modals when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === termsModal) {
+          termsModal.style.display = 'none';
+        }
+        if (e.target === privacyModal) {
+          privacyModal.style.display = 'none';
+        }
+      });
+    });
+  
+    // Main form functionality
     document.addEventListener('DOMContentLoaded', () => {
       // Check if user is authenticated
       const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -218,6 +277,98 @@
           } else {
             fileNameDisplay.textContent = 'No file chosen';
           }
+        });
+      }
+      
+      // Auto-select category based on item name
+      const itemNameInput = document.getElementById('item-name');
+      const categorySelect = document.getElementById('category');
+      
+      if (itemNameInput && categorySelect) {
+        // Category keywords mapping
+        const categoryKeywords = {
+          'electronics': ['phone', 'mobile', 'laptop', 'computer', 'tablet', 'ipad', 'iphone', 'android', 'charger', 
+                         'headphone', 'earphone', 'earbud', 'camera', 'watch', 'smart watch', 'smartwatch', 
+                         'speaker', 'tv', 'television', 'remote', 'keyboard', 'mouse', 'monitor', 'usb', 'drive', 
+                         'hard disk', 'ssd', 'power bank', 'adapter', 'playstation', 'xbox', 'nintendo', 'console'],
+          'jewelry': ['ring', 'necklace', 'bracelet', 'earring', 'gold', 'silver', 'diamond', 'jewel', 'pendant', 
+                     'locket', 'chain', 'anklet', 'brooch', 'gemstone', 'pearl', 'platinum'],
+          'documents': ['passport', 'id card', 'license', 'certificate', 'document', 'card', 'book', 'diary', 
+                       'notebook', 'file', 'folder', 'paper', 'receipt', 'bill', 'invoice', 'form', 'letter', 
+                       'envelope', 'contract', 'agreement', 'degree', 'transcript', 'resume', 'cv'],
+          'clothing': ['shirt', 'pant', 'trouser', 'jacket', 'coat', 'sweater', 'hoodie', 'dress', 'skirt', 'jeans', 
+                      'shorts', 'sock', 'underwear', 'bra', 'scarf', 'hat', 'cap', 'glove', 'uniform', 'suit', 
+                      'blazer', 'tie', 'belt', 'shoe', 'slipper', 'sandal', 'boot', 'footwear', 'cloth'],
+          'bags': ['bag', 'wallet', 'purse', 'handbag', 'backpack', 'suitcase', 'briefcase', 'pouch', 'sack', 
+                  'tote', 'clutch', 'messenger bag', 'duffel', 'luggage'],
+          'keys': ['key', 'keychain', 'car key', 'house key', 'office key', 'locker key', 'cabinet key', 'safe key'],
+          'human': ['person', 'human', 'child', 'kid', 'baby', 'boy', 'girl', 'man', 'woman', 'people', 'individual',
+                   'teen', 'teenager', 'adult', 'senior', 'elder', 'missing person'],
+          'pets': ['pet', 'dog', 'cat', 'bird', 'parrot', 'rabbit', 'hamster', 'guinea pig', 'fish', 'turtle', 
+                  'animal', 'puppy', 'kitten', 'reptile'],
+          'books': ['book', 'novel', 'textbook', 'magazine', 'comic', 'journal', 'diary', 'notebook', 'notepad', 
+                   'planner', 'stationery', 'pen', 'pencil', 'marker', 'highlighter'],
+          'toys': ['toy', 'game', 'puzzle', 'doll', 'action figure', 'board game', 'card game', 'stuffed animal', 
+                  'teddy bear', 'lego', 'building block', 'remote control', 'rc car', 'drone'],
+          'instruments': ['guitar', 'piano', 'keyboard', 'drum', 'violin', 'flute', 'saxophone', 'trumpet', 
+                         'instrument', 'musical', 'music', 'harmonica', 'accordion', 'mic', 'microphone'],
+          'sports': ['ball', 'bat', 'racket', 'racquet', 'tennis', 'golf', 'club', 'basketball', 'football', 
+                    'soccer', 'cricket', 'helmet', 'bicycle', 'bike', 'skate', 'skateboard', 'glove', 'sports'],
+          'luggage': ['luggage', 'suitcase', 'travel bag', 'trolley', 'trunk', 'carry-on', 'backpack', 'duffel bag'],
+          'medical': ['medicine', 'inhaler', 'insulin', 'prescription', 'medical device', 'hearing aid', 
+                     'wheelchair', 'crutch', 'walker', 'medical', 'health', 'first aid'],
+          'eyewear': ['glasses', 'sunglasses', 'spectacles', 'contact lens', 'eyeglasses', 'reading glasses', 
+                     'eyewear', 'lens'],
+          'accessories': ['umbrella', 'watch', 'hat', 'cap', 'scarf', 'glove', 'belt', 'tie', 'bow tie', 
+                         'handkerchief', 'accessory', 'hair clip', 'hairband', 'scrunchie', 'ribbon']
+        };
+        
+        // Function to determine category based on item name
+        function determineCategoryFromName(name) {
+          const lowerName = name.toLowerCase();
+          
+          for (const [category, keywords] of Object.entries(categoryKeywords)) {
+            for (const keyword of keywords) {
+              if (lowerName.includes(keyword.toLowerCase())) {
+                return category;
+              }
+            }
+          }
+          
+          return ''; // No match found
+        }
+        
+        // Add input event listener to item name field
+        itemNameInput.addEventListener('input', () => {
+          const itemName = itemNameInput.value.trim();
+          
+          // Reset manual selection flag if field is cleared completely
+          if (itemName.length === 0) {
+            categorySelect.dataset.manuallySelected = 'false';
+            categorySelect.value = ''; // Reset to default "Select a category"
+          }
+          
+          // Check if the user has manually selected a category
+          const hasManualSelection = categorySelect.dataset.manuallySelected === 'true';
+          
+          // Auto-select category if item name is long enough and user hasn't manually selected a category
+          if (itemName.length > 2 && !hasManualSelection) {
+            const suggestedCategory = determineCategoryFromName(itemName);
+            if (suggestedCategory) {
+              categorySelect.value = suggestedCategory;
+              // Add subtle highlight effect to show the auto-selection
+              categorySelect.style.backgroundColor = '#e8f0fe';
+              setTimeout(() => {
+                categorySelect.style.backgroundColor = '';
+              }, 1000);
+            }
+          }
+        });
+        
+        // Add change event listener to category select to track manual selection
+        categorySelect.addEventListener('change', () => {
+          // User has manually selected a category, remember this choice
+          categorySelect.dataset.manuallySelected = 'true';
         });
       }
       
@@ -292,26 +443,72 @@
               contactEmail: contactEmail
             };
             
-            // Debug output to console
-            console.log('Lost item data to submit:', JSON.stringify(itemData, null, 2));
-            
             // Handle photo upload if there is one
             const photo = document.getElementById('photo').files[0];
             if (photo) {
               try {
+                console.log('Uploading photo:', photo.name);
                 const uploadResult = await itemsAPI.uploadImage(photo);
                 if (uploadResult.success) {
                   itemData.photoBase64 = uploadResult.data.imageUrl;
+                  console.log('Successfully uploaded image:', uploadResult.data.imageUrl.substring(0, 50) + '...');
+                } else {
+                  console.error('Failed to upload image:', uploadResult.message);
                 }
               } catch (uploadError) {
                 console.error('Photo upload error:', uploadError);
-                // Continue without photo
+                // Continue without photo - but let's try client-side conversion as fallback
+                try {
+                  const reader = new FileReader();
+                  const imagePromise = new Promise((resolve) => {
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(photo);
+                  });
+                  
+                  const base64Image = await imagePromise;
+                  console.log('Converted image to base64 client-side as fallback');
+                  itemData.photoBase64 = base64Image;
+                } catch (readerError) {
+                  console.error('Failed to convert image client-side:', readerError);
+                }
               }
             }
             
             // Try a direct fetch approach instead of using the API abstraction
             try {
               const API_BASE_URL = 'http://localhost:8080/api';
+              
+              // Get user info from localStorage
+              let userId = null;
+              let userEmail = null;
+              let token = null;
+              try {
+                const userDataStr = localStorage.getItem('userData');
+                console.log('Raw userData from localStorage:', userDataStr);
+                
+                if (userDataStr) {
+                  const userData = JSON.parse(userDataStr);
+                  console.log('Parsed userData:', userData);
+                  
+                  if (userData) {
+                    // Handle MongoDB ObjectId format
+                    if (userData._id && typeof userData._id === 'object' && userData._id.$oid) {
+                      userId = userData._id.$oid;
+                      console.log('Found MongoDB ObjectId format:', userId);
+                    } else {
+                      userId = userData.id || userData._id || userData.userId;
+                      console.log('Found standard ID format:', userId);
+                    }
+                    userEmail = userData.email;
+                    console.log('Found user email:', userEmail);
+                  }
+                }
+                
+                token = localStorage.getItem('token');
+                console.log('Found token:', token ? 'Yes' : 'No');
+              } catch (userError) {
+                console.error('Error getting user info:', userError);
+              }
               
               // Create a request payload matching the LostItem Java model exactly
               const serverRequestPayload = {
@@ -321,17 +518,44 @@
                 dateLost: lostDate,        // Field name in Java model is dateLost
                 location: lostLocation,
                 contactEmail: contactEmail,
-                photoBase64: itemData.photoBase64
+                photoBase64: itemData.photoBase64,
+                
+                // Try multiple approaches for user association
+                userId: userId,
+                user_id: userId,
+                _id: userId,
+                user: userId,
+                userEmail: userEmail,
+                email: userEmail,
+                
+                // Try multiple image field names to cover different backend implementations
+                image: itemData.photoBase64,
+                imageUrl: itemData.photoBase64,
+                photo: itemData.photoBase64
               };
               
-              console.log('Matching Java model payload:', JSON.stringify(serverRequestPayload, null, 2));
+              console.log('Attempting to send request to backend with payload:', JSON.stringify({
+                ...serverRequestPayload,
+                photoBase64: serverRequestPayload.photoBase64 ? '[BASE64 DATA]' : null,
+                image: serverRequestPayload.image ? '[BASE64 DATA]' : null,
+                imageUrl: serverRequestPayload.imageUrl ? '[BASE64 DATA]' : null,
+                photo: serverRequestPayload.photo ? '[BASE64 DATA]' : null
+              }, null, 2));
+              
+              // Now try the normal request with everything
+              const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              };
+              
+              // Add authorization header if we have a token
+              if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+              }
               
               const response = await fetch(`${API_BASE_URL}/lost-items`, {
                 method: 'POST',
-                headers: { 
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                },
+                headers: headers,
                 credentials: 'include',
                 body: JSON.stringify(serverRequestPayload)
               });
@@ -371,25 +595,15 @@
                 const errorMessage = responseData.message || 'An unknown error occurred';
                 showNotification(`Failed to report item: ${errorMessage}`, 'error');
               }
-            } catch (fetchError) {
-              console.error('Direct fetch error:', fetchError);
-              // Fall back to the API method if direct fetch fails
-              const result = await itemsAPI.createLostItem(itemData);
-              console.log('API fallback response:', result);
+            } catch (error) {
+              console.error('Error submitting lost item form:', error);
+              showNotification(`Error: ${error.message || 'An unknown error occurred'}`, 'error');
               
-              if (result.success) {
-                showNotification('Lost item reported successfully!', 'success');
-                setTimeout(() => {
-                  window.location.href = '/pages/lost.html';
-                }, 2000);
-              } else {
-                // Restore submit button
+              // Restore submit button if it exists
+              const submitButton = form.querySelector('button[type="submit"]');
+              if (submitButton) {
                 submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
-                
-                // Show error message
-                const errorMessage = result.message || 'An unknown error occurred';
-                showNotification(`Failed to report item: ${errorMessage}`, 'error');
+                submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
               }
             }
           } catch (error) {
@@ -407,6 +621,93 @@
       }
     });
   </script>
+  
+  <!-- Terms of Service Modal -->
+  <div id="terms-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-header">
+        <h2>Terms of Service</h2>
+      </div>
+      <div class="modal-body">
+        <h3>1. Acceptance of Terms</h3>
+        <p>By accessing and using TalashNow services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+        
+        <h3>2. Service Description</h3>
+        <p>TalashNow provides a platform for users to report lost and found items with the goal of reuniting owners with their belongings.</p>
+        
+        <h3>3. User Obligations</h3>
+        <p>Users are required to:</p>
+        <ul>
+          <li>Provide accurate information when submitting reports</li>
+          <li>Only claim items that genuinely belong to them</li>
+          <li>Not use the service for any fraudulent purposes</li>
+          <li>Not harass other users through the platform</li>
+        </ul>
+        
+        <h3>4. Content Responsibility</h3>
+        <p>Users are solely responsible for the content they submit, including descriptions, images, and contact information.</p>
+        
+        <h3>5. Item Claims</h3>
+        <p>TalashNow is not responsible for verifying ownership of items. Users should take reasonable steps to verify claims before returning items.</p>
+        
+        <h3>6. Limitation of Liability</h3>
+        <p>TalashNow is not liable for any losses, damages, or costs related to using our service, including but not limited to lost or damaged items, false claims, or disputes between users.</p>
+        
+        <h3>7. Service Modifications</h3>
+        <p>We reserve the right to modify these terms or our services at any time. Continued use of TalashNow after changes indicates acceptance of the new terms.</p>
+        
+        <h3>8. Termination of Service</h3>
+        <p>TalashNow may suspend or terminate user accounts that violate these terms or engage in inappropriate behavior.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Privacy Policy Modal -->
+  <div id="privacy-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <div class="modal-header">
+        <h2>Privacy Policy</h2>
+      </div>
+      <div class="modal-body">
+        <h3>1. Information Collection</h3>
+        <p>TalashNow collects personal information including but not limited to names, email addresses, contact numbers, and location data when users submit reports or register for accounts.</p>
+        
+        <h3>2. Use of Information</h3>
+        <p>We use collected information to:</p>
+        <ul>
+          <li>Facilitate the lost and found process</li>
+          <li>Connect users who have lost items with those who have found them</li>
+          <li>Improve our services</li>
+          <li>Send notifications related to user accounts and activities</li>
+        </ul>
+        
+        <h3>3. Information Sharing</h3>
+        <p>We share limited personal information between users only as necessary to facilitate item recovery. We do not sell user data to third parties.</p>
+        
+        <h3>4. Data Security</h3>
+        <p>TalashNow implements reasonable security measures to protect personal information. However, no internet transmission is completely secure.</p>
+        
+        <h3>5. User Rights</h3>
+        <p>Users have the right to:</p>
+        <ul>
+          <li>Access their personal data</li>
+          <li>Correct inaccurate information</li>
+          <li>Delete their account and associated data</li>
+          <li>Object to processing of their data</li>
+        </ul>
+        
+        <h3>6. Cookies and Tracking</h3>
+        <p>TalashNow uses cookies to enhance user experience, track usage patterns, and remember user preferences.</p>
+        
+        <h3>7. Third-Party Services</h3>
+        <p>Our service may include links to third-party websites or services that are not operated by us. We have no control over the content and practices of these sites.</p>
+        
+        <h3>8. Changes to Privacy Policy</h3>
+        <p>We may update our Privacy Policy from time to time. We will notify users of significant changes by email or through the website.</p>
+      </div>
+    </div>
+  </div>
 </body>
-
 </html>

@@ -53,19 +53,22 @@ body {
   cursor: pointer;
   font-size: 14px;
   transition: color 0.3s ease;
-  width: 5rem
+  width: 6rem
 }
 
-.nav-btn[data-form="register"] {
+.nav-btn[data-form="register"],
+#logout-btn {
   background-color: #da7b2d;
   color: #ffffff;
   border-radius: 4px;
 }
 
-.nav-btn[data-form="login"] {
+.nav-btn[data-form="login"],
+.nav-btn {
   color: #ff7300;
   border-radius: 4px;
-  border: 1px solid #ff7300
+  border: 1px solid #ff7300;
+  margin-right: 4px;
 }
 
 .nav-btn[data-form="register"]:hover {
@@ -384,8 +387,8 @@ h1, h2, h3, h4, h5 {
 }
 
 /* Form Styles */
-#lost-item-form,
-#found-item-form {
+#lostItemForm,
+#foundItemForm {
   max-width: 800px;
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.05);
@@ -775,6 +778,7 @@ input[type="date"] {
 
 .page-header h1,
 .form-header h1,
+.dashboard-header h1,
 .form-title {
   font-family: FjallaOne-Regular;
   font-size: 2.5rem;
@@ -786,6 +790,7 @@ input[type="date"] {
 
 .form-header h1::after,
 .page-header h1::after,
+.dashboard-header h1::after,
 .form-title::after {
   content: '';
   position: absolute;
@@ -1202,4 +1207,48 @@ input[type="date"] {
 }
 #notification.show {
   opacity: 1;
+}
+#notification.info {
+  background-color: #417ff1eb;
+}
+
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #ebe9e9;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.empty-state .btn {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: #333;
+  display: inline-block;
+  white-space: normal;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.empty-state .btn:hover {
+  background-color: #f5f5f5;
 }
