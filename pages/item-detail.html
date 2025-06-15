@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- First load auth-utils.js to immediately apply authentication state -->
+  <script src="../js/auth-utils.js"></script>
   <!-- favicon -->
   <link rel="icon" type="image/png" href="../images/favicon/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="../images/favicon/favicon.svg" />
@@ -20,13 +22,14 @@
   <!-- style -->
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="../css/responsive.css" />
-  <title>Lost and Found Items | TalashNow</title>
+  <link rel="stylesheet" href="../css/claim.css" />
+  <title>Item Details | TalashNow</title>
 
   <style>
     #item-detail {
       background-color: #7b3005;
-      color: #ffffff;
-      padding: 60px 15%;
+      color: #000;
+      padding: 20px 10%;
       animation: fadeIn 0.5s ease-out;
     }
 
@@ -143,6 +146,11 @@
       color: #ff4444;
     }
 
+    .status-badge.found {
+      background-color: rgba(0, 128, 0, 0.1);
+      color: #008000;
+    }
+
     .status-badge.approved {
       background-color: rgba(0, 128, 0, 0.1);
       color: #008000;
@@ -180,10 +188,52 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    #notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      z-index: 1000;
+      display: none;
+    }
+
+    .success {
+      background-color: #4CAF50;
+    }
+
+    .error {
+      background-color: #f44336;
+    }
+
+    .warning {
+      background-color: #ff9800;
+    }
+
+    .info {
+      background-color: #2196F3;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group span {
+      color: rgb(255, 106, 0);
+    }
   </style>
 </head>
 
 <body>
+  <!-- Notification Container -->
+  <div id="notification"></div>
+
   <div id="container">
     <header>
       <nav id="navbar" class="uni-padding">
@@ -196,7 +246,6 @@
             <span class="bar"></span>
             <span class="bar"></span>
           </button>
-          <!-- <div class="nav-menu"> -->
           <ul class="nav-menu">
             <li><a href="../index.html">Home</a></li>
             <li><a href="lost.html">Lost Item</a></li>
@@ -205,61 +254,73 @@
             <li><a href="contact.html">Contact us</a></li>
           </ul>
           <div class="nav-buttons nav-menu">
-            <a href="/pages/auth.html?form=login"><button class="nav-btn" data-form="login">Login</button></a>
-            <a href="/pages/auth.html?form=register"><button class="nav-btn" data-form="register">Register</button></a>
+            <div id="auth-buttons">
+              <a href="/pages/auth.html?form=login"><button class="nav-btn" data-form="login">Login</button></a>
+              <a href="/pages/auth.html?form=register"><button class="nav-btn"
+                  data-form="register">Register</button></a>
+            </div>
+            <div id="user-buttons" style="display: none;">
+              <a href="/pages/dashboard.html"><button class="nav-btn">Dashboard</button></a>
+              <button class="nav-btn" id="logout-btn">Logout</button>
+            </div>
           </div>
-          <!-- </div> -->
         </div>
       </nav>
     </header>
 
     <section id="item-detail" class="uni-padding">
       <div class="back-container">
-        <a href="/pages/lost.html" class="back-link">
+        <a href="#" id="back-link" class="back-link">
           <i class="fas fa-arrow-left"></i> Back
         </a>
       </div>
       <div class="item-detail-card">
-        <div class="item-detail-content">
-          <div class="item-image">
-            <img src="https://images.pexels.com/photos/10984952/pexels-photo-10984952.jpeg" alt="Gold Necklace">
-          </div>
-          <div class="item-info">
-            <div class="item-header">
-              <h1>Gold Necklace</h1>
-              <div class="status-badges">
-                <span class="status-badge lost">Lost</span>
-                <span class="status-badge approved">Approved</span>
-              </div>
-            </div>
-            <p>Gold necklace with a heart pendant. Has sentimental value.</p>
-            <div class="item-meta">
-              <div class="meta-item">
-                <i class="fas fa-calendar-alt"></i>
-                <span>May 12, 2023</span>
-              </div>
-              <div class="meta-item">
-                <i class="fas fa-map-pin"></i>
-                <span>Gym Locker Room</span>
-              </div>
-              <div class="meta-item">
-                <i class="fas fa-tag"></i>
-                <span>Accessories</span>
-              </div>
-              <div class="meta-item">
-                <i class="fas fa-clock"></i>
-                <span>Posted on May 12, 2023</span>
-              </div>
-              <div class="meta-item">
-                <i class="fas fa-user"></i>
-                <span>Contact: jane@example.com</span>
-              </div>
-            </div>
-            <a href="lost.html" class="btn btn-orange" style="width: 100%; text-align: center; margin-top: 1rem;">I Lost This Item</a>
+        <div class="item-detail-content" id="item-content">
+          <!-- Item details will be loaded dynamically -->
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading item details...</p>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Claim Modal -->
+    <div id="claim-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div class="modal-header">
+          <h2>Claim This Item</h2>
+        </div>
+        <form id="claim-form">
+          <div class="form-group">
+            <label for="claim-name">Your Full Name<span>*</span></label>
+            <input type="text" id="claim-name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="claim-contact">Contact Number<span>*</span></label>
+            <input type="tel" id="claim-contact" name="contactNumber" required>
+          </div>
+          <div class="form-group">
+            <label for="claim-email">Email Address<span>*</span></label>
+            <input type="email" id="claim-email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="claim-description">Proof of Ownership<span>*</span></label>
+            <textarea id="claim-description" name="description" required
+              placeholder="Please provide specific details about the item that only the owner would know (e.g., unique marks, content, serial number, etc.)"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="claim-photo">Upload Proof (Optional)</label>
+            <input type="file" id="claim-photo" name="photo" accept="image/*">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-cancel" id="cancel-claim">Cancel</button>
+            <button type="submit" class="btn btn-submit">Submit Claim</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <footer class="site-footer">
       <div class="footer-container">
@@ -311,7 +372,224 @@
     </footer>
   </div>
 
+  <script src="../js/api.js"></script>
   <script src="../js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Get item ID and type from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const itemId = urlParams.get('id');
+      const itemType = urlParams.get('type');
+      const referrer = urlParams.get('from') || (itemType === 'LOST' ? 'lost.html' : 'found.html');
+
+      // Set the back link
+      const backLink = document.getElementById('back-link');
+      if (backLink) {
+        backLink.href = referrer;
+      }
+
+      if (!itemId || !itemType) {
+        showNotification('Invalid item details', 'error');
+        setTimeout(() => {
+          window.location.href = 'lost.html';
+        }, 2000);
+        return;
+      }
+
+      try {
+        // Fetch item details
+        const item = await itemsAPI.getItemById(itemId, itemType);
+
+        if (!item) {
+          showNotification('Item not found', 'error');
+          setTimeout(() => {
+            window.location.href = itemType === 'LOST' ? 'lost.html' : 'found.html';
+          }, 2000);
+          return;
+        }
+
+        // Update the page title
+        document.title = `${item.itemName || 'Item Details'} | TalashNow`;
+
+        // Render the item details
+        const itemContent = document.getElementById('item-content');
+
+        if (itemContent) {
+          itemContent.innerHTML = `
+            <div class="item-image">
+              <img src="${item.photoBase64 || '../images/No-Image-Placeholder.svg.png'}" alt="${item.itemName || 'Item Image'}">
+            </div>
+            <div class="item-info">
+              <div class="item-header">
+                <h1>${item.itemName || 'Untitled Item'}</h1>
+                <div class="status-badges">
+                  <span class="status-badge ${itemType.toLowerCase()}">${itemType === 'LOST' ? 'Lost' : 'Found'}</span>
+                  <span class="status-badge approved">Approved</span>
+                </div>
+              </div>
+              <p>${item.description || 'No description provided.'}</p>
+              <div class="item-meta">
+                <div class="meta-item">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span>${new Date(item.dateLost || item.dateFound || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-map-pin"></i>
+                  <span>${item.location || 'Unknown location'}</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-tag"></i>
+                  <span>${item.category || 'Uncategorized'}</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-user"></i>
+                  <span>Contact: ${item.contactEmail || 'Not available'}</span>
+                </div>
+              </div>
+              ${itemType === 'FOUND' ?
+              `<button id="claim-btn" class="btn btn-orange" style="width: 100%; text-align: center; margin-top: 1rem;">I Lost This Item</button>` :
+              ''}
+            </div>
+          `;
+
+          // Add claim functionality for found items
+          if (itemType === 'FOUND') {
+            const claimBtn = document.getElementById('claim-btn');
+            const claimModal = document.getElementById('claim-modal');
+            const closeModal = document.querySelector('.close-modal');
+            const cancelBtn = document.getElementById('cancel-claim');
+            const claimForm = document.getElementById('claim-form');
+
+            // Open modal when claim button is clicked
+            if (claimBtn) {
+              claimBtn.addEventListener('click', () => {
+                // Check if user is authenticated
+                const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+                if (!isAuthenticated) {
+                  showNotification('Please login to claim this item', 'error');
+                  setTimeout(() => {
+                    window.location.href = '/pages/auth.html?form=login';
+                  }, 2000);
+                  return;
+                }
+
+                // Pre-fill email if available
+                try {
+                  const userDataStr = localStorage.getItem('userData');
+                  if (userDataStr) {
+                    const userData = JSON.parse(userDataStr);
+                    if (userData && userData.email) {
+                      document.getElementById('claim-email').value = userData.email;
+                    }
+                    if (userData && userData.name) {
+                      document.getElementById('claim-name').value = userData.name;
+                    }
+                  }
+                } catch (error) {
+                  console.error('Error getting user data:', error);
+                }
+
+                claimModal.style.display = 'block';
+              });
+            }
+
+            // Close modal when X is clicked
+            if (closeModal) {
+              closeModal.addEventListener('click', () => {
+                claimModal.style.display = 'none';
+              });
+            }
+
+            // Close modal when Cancel is clicked
+            if (cancelBtn) {
+              cancelBtn.addEventListener('click', () => {
+                claimModal.style.display = 'none';
+              });
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+              if (event.target === claimModal) {
+                claimModal.style.display = 'none';
+              }
+            });
+
+            // Handle form submission
+            if (claimForm) {
+              claimForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = claimForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+
+                try {
+                  // Get form data
+                  const name = document.getElementById('claim-name').value;
+                  const contactNumber = document.getElementById('claim-contact').value;
+                  const email = document.getElementById('claim-email').value;
+                  const description = document.getElementById('claim-description').value;
+                  const photoFile = document.getElementById('claim-photo').files[0];
+
+                  // Prepare claim data
+                  const claimData = {
+                    name,
+                    contactNumber,
+                    email,
+                    description,
+                    itemId
+                  };
+
+                  // Upload photo if provided
+                  if (photoFile) {
+                    try {
+                      const uploadResult = await itemsAPI.uploadImage(photoFile);
+                      if (uploadResult.success) {
+                        claimData.proofPhotoUrl = uploadResult.data.imageUrl;
+                      } else {
+                        console.error('Failed to upload proof photo:', uploadResult.message);
+                      }
+                    } catch (uploadError) {
+                      console.error('Error uploading proof photo:', uploadError);
+                    }
+                  }
+
+                  // Submit claim using Command pattern via API
+                  const result = await itemsAPI.createClaim(itemId, claimData);
+
+                  if (result.success) {
+                    // Close modal
+                    claimModal.style.display = 'none';
+
+                    // Show success notification
+                    showNotification('Your claim has been submitted successfully! The item owner will be notified.', 'success');
+
+                    // Redirect to dashboard after delay
+                    setTimeout(() => {
+                      window.location.href = '/pages/dashboard.html';
+                    }, 3000);
+                  } else {
+                    showNotification(`Failed to submit claim: ${result.message}`, 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                  }
+                } catch (error) {
+                  console.error('Error submitting claim:', error);
+                  showNotification(`Error: ${error.message || 'An unknown error occurred'}`, 'error');
+                  submitBtn.disabled = false;
+                  submitBtn.textContent = originalBtnText;
+                }
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading item details:', error);
+        showNotification(`Error: ${error.message || 'An unknown error occurred'}`, 'error');
+      }
+    });
+  </script>
 </body>
 
 </html>

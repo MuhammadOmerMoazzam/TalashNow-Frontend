@@ -9,9 +9,21 @@
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   console.log('Initial auth state:', isAuthenticated);
   
+  let userData = null;
+  try {
+    const userDataStr = localStorage.getItem('userData');
+    if (userDataStr) {
+      userData = JSON.parse(userDataStr);
+      console.log('User data found in storage:', userData.name || userData.email || 'Unknown user');
+    }
+  } catch (e) {
+    console.error('Error parsing stored user data:', e);
+  }
+  
   // Set a global variable that other scripts can check
   window.TalashNow = window.TalashNow || {};
   window.TalashNow.isAuthenticated = isAuthenticated;
+  window.TalashNow.userData = userData;
   
   // Add a style element to hide auth buttons immediately if authenticated
   if (isAuthenticated) {
@@ -31,6 +43,56 @@
       return null;
     }
     return element;
+  };
+  
+  window.TalashNow.getUserData = function() {
+    try {
+      const userDataStr = localStorage.getItem('userData');
+      if (userDataStr) {
+        const userData = JSON.parse(userDataStr);
+        
+        // Add helper method to get userId in the correct format
+        if (userData) {
+          userData.getUserId = function() {
+            if (this._id && typeof this._id === 'object' && this._id.$oid) {
+              return this._id.$oid;
+            }
+            return this.id || this._id || this.userId;
+          };
+        }
+        
+        return userData;
+      }
+    } catch (e) {
+      console.error('Error getting user data:', e);
+    }
+    return null;
+  };
+  
+  // Add a helper to set user data
+  window.TalashNow.setUserData = function(data) {
+    try {
+      if (data) {
+        // Check if we need to transform the data before storing
+        if (data._id && typeof data._id === 'string') {
+          // If the _id is a string but looks like a MongoDB ObjectId, convert it to the proper format
+          if (data._id.match(/^[0-9a-f]{24}$/)) {
+            console.log('Converting string ID to MongoDB ObjectId format:', data._id);
+            data._id = { $oid: data._id };
+          }
+        }
+        
+        localStorage.setItem('userData', JSON.stringify(data));
+        window.TalashNow.userData = data;
+        console.log('Updated user data in storage');
+      } else {
+        localStorage.removeItem('userData');
+        window.TalashNow.userData = null;
+        console.log('Cleared user data from storage');
+      }
+    } catch (e) {
+      console.error('Error setting user data:', e);
+    }
   };
 })();
 
@@ -55,9 +117,21 @@ function checkAndUpdateAuthUI() {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     console.log('Updating auth UI, authenticated:', isAuthenticated);
     
+    // Get user data
+    let userData = null;
+    try {
+      const userDataStr = localStorage.getItem('userData');
+      if (userDataStr) {
+        userData = JSON.parse(userDataStr);
+      }
+    } catch (e) {
+      console.error('Error parsing user data in checkAndUpdateAuthUI:', e);
+    }
+    
     // Update global state
     window.TalashNow = window.TalashNow || {};
     window.TalashNow.isAuthenticated = isAuthenticated;
+    window.TalashNow.userData = userData;
     
     const authButtons = document.getElementById('auth-buttons');
     const userButtons = document.getElementById('user-buttons');
@@ -142,8 +216,12 @@ function setupLogoutButton() {
       
       // Clear authentication state IMMEDIATELY
       localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userData');
+      localStorage.removeItem('token');
+      
       window.TalashNow = window.TalashNow || {};
       window.TalashNow.isAuthenticated = false;
+      window.TalashNow.userData = null;
       
       // Update UI immediately
       const authButtons = document.getElementById('auth-buttons');

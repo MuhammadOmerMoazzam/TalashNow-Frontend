@@ -133,9 +133,19 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('from-date').value = '';
       document.getElementById('to-date').value = '';
       
-      // Reload items without filters
+      // Reload items without filters - use type-specific method instead of getItems
       try {
-        const items = await itemsAPI.getItems();
+        // Determine the type based on the page URL
+        const type = window.location.pathname.includes('lost') ? 'LOST' : 'FOUND';
+        const itemsAPI = ApiSingleton.getInstance().items;
+        
+        let items = [];
+        if (type === 'LOST') {
+          items = await itemsAPI.getLostItems();
+        } else {
+          items = await itemsAPI.getFoundItems();
+        }
+        
         updateItemsList(items);
       } catch (error) {
         showNotification(`Error: ${error.message}`, 'error');
@@ -208,7 +218,9 @@ function updateItemsList(items) {
 }
 
 // Function to show notification
-function showNotification(message, type = 'success') {
+function showNotification(message, type = 'success', duration = 4000) {
+  clearAllNotifications();
+  
   let notification = document.getElementById('notification');
 
   if (!notification) {
@@ -241,6 +253,12 @@ function showNotification(message, type = 'success') {
       #notification.error {
         background-color: #f44336;
       }
+      #notification.warning {
+        background-color: #ff9800;
+      }
+      #notification.info {
+        background-color: #2196f3;
+      }
       #notification.show {
         opacity: 1;
       }
@@ -251,11 +269,37 @@ function showNotification(message, type = 'success') {
   notification.textContent = message;
   notification.className = type;
   notification.classList.add('show');
-  setTimeout(() => {
+  
+  // Clear any existing timeout
+  if (window._notificationTimeout) {
+    clearTimeout(window._notificationTimeout);
+  }
+  
+  // Set new timeout
+  window._notificationTimeout = setTimeout(() => {
     notification.classList.remove('show');
-    notification.textContent = '';
-    notification.className = '';
-  }, 4000);
+    setTimeout(() => {
+      notification.textContent = '';
+      notification.className = '';
+    }, 500); // Extra time for fade out animation
+  }, duration);
+}
+
+// Function to clear all notifications
+function clearAllNotifications() {
+  // Clear any existing notification
+  const existingNotification = document.getElementById('notification');
+  if (existingNotification) {
+    existingNotification.classList.remove('show');
+    existingNotification.textContent = '';
+    existingNotification.className = '';
+  }
+  
+  // Also clear any timeouts
+  if (window._notificationTimeout) {
+    clearTimeout(window._notificationTimeout);
+    window._notificationTimeout = null;
+  }
 }
 
 // Function to update navbar based on authentication status

@@ -1,0 +1,120 @@
+/* Claim Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+.modal-header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+/* Modal Body Styles for Terms and Privacy Policy */
+.modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+  line-height: 1.5;
+}
+
+.modal-body h3 {
+  color: #da7b2d;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.modal-body p, .modal-body ul {
+  margin-bottom: 15px;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.modal-body ul {
+  padding-left: 20px;
+}
+
+.modal-body li {
+  margin-bottom: 5px;
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-submit {
+  background-color: #da7b2d;
+  color: white;
+}
+
+.btn-submit:hover {
+  background-color: #c06b25;
+}
+
+.btn-cancel:hover {
+  background-color: #e5e5e5;
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    margin: 20% auto;
+    width: 90%;
+    padding: 15px;
+  }
+  
+  .modal-body {
+    max-height: 300px;
+  }
+}

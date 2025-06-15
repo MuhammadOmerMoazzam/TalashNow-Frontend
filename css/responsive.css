@@ -223,7 +223,7 @@
 
   #lost-item-form,
   #found-item-form {
-    padding: 20px;
+    padding: 20px 1px;
   }
 
   .form-header h1 {
@@ -521,5 +521,174 @@
     width: 24px;
     height: 24px;
     font-size: 12px;
+  }
+}
+
+/* Medium to small screens (max-width: 560px) */
+@media (max-width: 560px) {
+  /* Dashboard stats responsive layout */
+  .stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  /* Make each stat card take full width */
+  .stats > div {
+    width: 100%;
+  }
+  
+  /* Dashboard header responsive layout */
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  /* Ensure any buttons or elements in the header take full width */
+  .dashboard-header > * {
+    width: 100%;
+  }
+  
+  /* Align any buttons to be centered */
+  .dashboard-header button,
+  .dashboard-header .btn {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  /* Empty state responsive styling */
+  .empty-state {
+    padding: 15px;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
+  .empty-state .btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    display: inline-block;
+    width: 100%;
+    max-width: 250px;
+  }
+}
+
+/* Small mobile screens (max-width: 400px) */
+@media (max-width: 400px) {
+  /* Empty state styling for very small screens */
+  .empty-state {
+    padding: 10px 5px;
+  }
+  
+  .empty-state p {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .empty-state .btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Extra small mobile screens (max-width: 350px) */
+@media (max-width: 350px) {
+  /* Prevent content from being cut off on very small screens */
+  .empty-state {
+    padding: 8px 3px;
+    margin: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    padding: 0;
+    width: 100% !important;
+  }
+  
+  .empty-state .btn {
+    padding: 6px 8px !important;
+    font-size: 0.8rem !important;
+    white-space: normal !important;
+    height: auto !important;
+    min-height: 36px !important;
+    width: auto !important;
+    max-width: 95% !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  /* Adjust dashboard elements for very small screens */
+  .dashboard-header > * {
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+  }
+  
+  .stats > div {
+    padding: 8px;
+  }
+
+  /* Fix for tab buttons */
+  .tab-btn {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  
+  /* Make grid items take full width */
+  .items-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Extremely small screens (max-width: 320px) */
+@media (max-width: 320px) {
+  body {
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+  
+  .empty-state {
+    padding: 5px 2px !important;
+    margin: 0 !important;
+  }
+  
+  .empty-state p {
+    font-size: 0.9rem !important;
+    margin-bottom: 5px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .empty-state .btn {
+    padding: 5px 6px !important;
+    font-size: 0.75rem !important;
+    line-height: 1.2 !important;
+    min-height: 30px !important;
+    max-width: 90% !important;
+  }
+  
+  /* Make sure container doesn't overflow */
+  .dashboard-section,
+  .tab-pane,
+  .items-grid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 }
