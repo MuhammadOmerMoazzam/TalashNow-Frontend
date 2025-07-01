@@ -4,7 +4,7 @@ const ApiSingleton = (function() {
     
     function createInstance() {
         // Private variables and methods
-        const API_BASE_URL = 'http://localhost:8080/api';
+        const API_BASE_URL = 'https://talashnow-backend.up.railway.app/api';
         
         // Public methods
         return {
